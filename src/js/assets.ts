@@ -4,7 +4,8 @@ import {
   loadImage,
   on,
   TileEngine,
-  dataAssets
+  dataAssets,
+  Sprite
 } from "../kontra/kontra.js";
 import tilesImage from "../maps/tiles.png";
 import mapJson from "../maps/map.json";
@@ -22,7 +23,20 @@ export function loadAssets() {
     .then(function(assets: any) {
       mapJson.tilesets[0].image = tilesImage;
       let tileEngine = TileEngine(mapJson);
+
+      let sprite = Sprite({
+        x: 100,        // starting x,y position of the sprite
+        y: 80,
+        color: 'red',  // fill color of the sprite rectangle
+        width: 20,     // width and height of the sprite rectangle
+        height: 40,
+        dx: 0          // move the sprite 2px to the right every frame
+      });
+
+      tileEngine.addObject(sprite)
       tileEngine.render();
+      sprite.render();
+
 
       console.log("GAME CAN START NOW");
     })

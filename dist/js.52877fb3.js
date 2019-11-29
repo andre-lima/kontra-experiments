@@ -5071,7 +5071,18 @@ function loadAssets() {
   Promise.all([loadingImages]).then(function (assets) {
     _map.default.tilesets[0].image = _tiles.default;
     var tileEngine = (0, _kontra.TileEngine)(_map.default);
+    var sprite = (0, _kontra.Sprite)({
+      x: 100,
+      y: 80,
+      color: 'red',
+      width: 20,
+      height: 40,
+      dx: 0 // move the sprite 2px to the right every frame
+
+    });
+    tileEngine.addObject(sprite);
     tileEngine.render();
+    sprite.render();
     console.log("GAME CAN START NOW");
   }).catch(function (err) {
     console.log(err);
@@ -5098,7 +5109,7 @@ var _init = (0, _kontra.init)(),
     context = _init.context;
 
 (0, _assets.loadAssets)();
-(0, _helpers.configCanvas)(canvas, 571, 571, "#111111"); // context.scale(2, 2);
+(0, _helpers.configCanvas)(canvas, 800, 800, "#111111"); // context.scale(2, 2);
 // canvas.style.imageRendering = "crisp-edges";
 // let img = new Image();
 // img.src = mapImage;
@@ -5131,7 +5142,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33137" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44063" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

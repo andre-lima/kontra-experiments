@@ -9,7 +9,7 @@ let { canvas, context } = init();
 
 loadAssets();
 
-configCanvas(canvas, 571, 571, "#111111");
+configCanvas(canvas, 800, 800, "#111111");
 // context.scale(2, 2);
 // canvas.style.imageRendering = "crisp-edges";
 
