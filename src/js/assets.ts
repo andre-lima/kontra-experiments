@@ -7,7 +7,7 @@ import {
   dataAssets
 } from "../kontra/kontra.js";
 import tilesImage from "../maps/tiles.png";
-import mapJson from "../maps/map2.json";
+import mapJson from "../maps/map.json";
 let assetsLoaded = 0;
 console.log(mapJson);
 
@@ -17,11 +17,9 @@ export function loadAssets() {
   });
 
   const loadingImages = load(tilesImage);
-  // const loadingMaps = loadData(mapJson);
 
   Promise.all([loadingImages])
     .then(function(assets: any) {
-      console.log(dataAssets);
       mapJson.tilesets[0].image = tilesImage;
       let tileEngine = TileEngine(mapJson);
       tileEngine.render();
