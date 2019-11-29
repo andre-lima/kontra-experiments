@@ -4097,38 +4097,75 @@ let kontra = {
 };
 var _default = kontra;
 exports.default = _default;
+},{}],"maps/tiles.png":[function(require,module,exports) {
+module.exports = "/tiles.92cd188e.png";
+},{}],"helpers/index.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.configCanvas = configCanvas;
+exports.$$ = exports.$ = void 0;
+// based on https://gist.github.com/paulirish/12fb951a8b893a454b32
+var $ = document.querySelector.bind(document);
+exports.$ = $;
+var $$ = document.querySelectorAll.bind(document);
+exports.$$ = $$;
+
+function configCanvas(canvas) {
+  var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 480;
+  var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 320;
+  var color = arguments.length > 3 ? arguments[3] : undefined;
+  canvas.width = width;
+  canvas.height = height;
+  canvas.style.backgroundColor = color;
+  return canvas;
+}
 },{}],"js/index.ts":[function(require,module,exports) {
 "use strict";
 
 var _kontra = require("kontra");
 
+var _tiles = _interopRequireDefault(require("../maps/tiles.png"));
+
+var _helpers = require("../helpers");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var _init = (0, _kontra.init)(),
-    canvas = _init.canvas;
+    canvas = _init.canvas,
+    context = _init.context;
 
-var sprite = (0, _kontra.Sprite)({
-  x: 100,
-  y: 80,
-  color: 'red',
-  width: 20,
-  height: 40,
-  dx: 2 // move the sprite 2px to the right every frame
+(0, _helpers.configCanvas)(canvas, 571, 571, "#111111"); // context.scale(2, 2);
+// canvas.style.imageRendering = "crisp-edges";
 
-});
-var loop = (0, _kontra.GameLoop)({
-  update: function update() {
-    sprite.update(); // wrap the sprites position when it reaches
-    // the edge of the screen
+var img = new Image();
+img.src = _tiles.default;
+console.log((0, _helpers.$)(".bling"));
 
-    if (sprite.x > canvas.width) {
-      sprite.x = -sprite.width;
-    }
-  },
-  render: function render() {
-    sprite.render();
-  }
-});
-loop.start(); // start the game
-},{"kontra":"../node_modules/kontra/kontra.mjs"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+img.onload = function () {
+  var tileEngine = (0, _kontra.TileEngine)({
+    // tile size
+    tilewidth: 16,
+    tileheight: 16,
+    // map size in tiles
+    width: 9,
+    height: 9,
+    // tileset object
+    tilesets: [{
+      firstgid: 1,
+      image: img
+    }],
+    // layer object
+    layers: [{
+      name: "ground",
+      data: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 2, 3, 3, 3, 3, 1, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0]
+    }]
+  });
+  tileEngine.render();
+};
+},{"kontra":"../node_modules/kontra/kontra.mjs","../maps/tiles.png":"maps/tiles.png","../helpers":"helpers/index.ts"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -4156,7 +4193,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35883" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44933" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,30 +1,126 @@
-import { init, Sprite, GameLoop } from 'kontra';
+import { TileEngine, init } from "kontra";
+import mapImage from "../maps/tiles.png";
+import { $, $$, configCanvas } from "../helpers";
 
-let { canvas } = init();
+let { canvas, context } = init();
 
-let sprite = Sprite({
-  x: 100,        // starting x,y position of the sprite
-  y: 80,
-  color: 'red',  // fill color of the sprite rectangle
-  width: 20,     // width and height of the sprite rectangle
-  height: 40,
-  dx: 2          // move the sprite 2px to the right every frame
-});
+configCanvas(canvas, 571, 571, "#111111");
+// context.scale(2, 2);
+// canvas.style.imageRendering = "crisp-edges";
 
-let loop = GameLoop({  // create the main game loop
-  update: function() { // update the game state
-    sprite.update();
+let img = new Image();
+img.src = mapImage;
 
-    // wrap the sprites position when it reaches
-    // the edge of the screen
-    if (sprite.x > canvas.width) {
-      sprite.x = -sprite.width;
-    }
-  },
-  render: function() { // render the game state
-    sprite.render();
-  }
-});
+console.log($(".bling"));
 
-loop.start();    // start the game
+img.onload = function() {
+  let tileEngine = TileEngine({
+    // tile size
+    tilewidth: 16,
+    tileheight: 16,
 
+    // map size in tiles
+    width: 9,
+    height: 9,
+
+    // tileset object
+    tilesets: [
+      {
+        firstgid: 1,
+        image: img
+      }
+    ],
+
+    // layer object
+    layers: [
+      {
+        name: "ground",
+        data: [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          1,
+          1,
+          1,
+          2,
+          3,
+          3,
+          3,
+          3,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          1,
+          1,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          0
+        ]
+      }
+    ]
+  });
+
+  tileEngine.render();
+};
