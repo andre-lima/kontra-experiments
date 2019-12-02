@@ -16,3 +16,17 @@ function configCanvas(
 }
 
 export { $, $$, configCanvas };
+
+export function distance(obj, tgt = { x: 0, y: 0 }): number {
+  return Math.sqrt(Math.pow(obj.x - tgt.x, 2) + Math.pow(obj.y - tgt.y, 2));
+}
+
+export function normalize(v) {
+  const d = distance(v);
+
+  if (d > 0) {
+    return { x: v.x / d, y: v.y / d };
+  } else {
+    return { x: 0, y: 0 };
+  }
+}

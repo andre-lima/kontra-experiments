@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "typeRoots": ["src/kontra.d.ts"],
+    "typeRoots": ["declarations/kontra.d.ts", "declarations/files.d.ts"],
     "outDir": "./lib/",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "module": "es6",
     "target": "es6",
     "allowJs": true

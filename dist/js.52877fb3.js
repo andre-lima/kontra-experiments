@@ -4631,6 +4631,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.configCanvas = configCanvas;
+exports.distance = distance;
+exports.normalize = normalize;
 exports.$$ = exports.$ = void 0;
 // based on https://gist.github.com/paulirish/12fb951a8b893a454b32
 var $ = document.querySelector.bind(document);
@@ -4647,17 +4649,55 @@ function configCanvas(canvas) {
   canvas.style.backgroundColor = color;
   return canvas;
 }
+
+function distance(obj) {
+  var tgt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+    x: 0,
+    y: 0
+  };
+  return Math.sqrt(Math.pow(obj.x - tgt.x, 2) + Math.pow(obj.y - tgt.y, 2));
+}
+
+function normalize(v) {
+  var d = distance(v);
+
+  if (d > 0) {
+    return {
+      x: v.x / d,
+      y: v.y / d
+    };
+  } else {
+    return {
+      x: 0,
+      y: 0
+    };
+  }
+}
 },{}],"maps/tiles.png":[function(require,module,exports) {
 module.exports = "/tiles.92cd188e.png";
+},{}],"assets/images/player.png":[function(require,module,exports) {
+module.exports = "/player.6e7d807a.png";
 },{}],"maps/map.json":[function(require,module,exports) {
 module.exports = {
+  "compressionlevel": 0,
   "height": 30,
   "infinite": false,
   "layers": [{
-    "data": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 3, 3, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 3, 3, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 3, 2, 2, 3, 0, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 3, 2, 2, 3, 0, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 3, 2, 2, 3, 0, 3, 2, 2, 2, 3, 3, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 3, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 2, 2, 3, 0, 3, 2, 2, 2, 3, 3, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 3, 0, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 3, 0, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 3, 2, 2, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 3, 2, 2, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 3, 2, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 3, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 3, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1],
+    "data": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 3, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 3, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 3, 0, 0, 3, 0, 3, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 3, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 0, 0, 3, 0, 3, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 3, 0, 0, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 3, 0, 0, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1],
     "height": 30,
     "id": 1,
     "name": "walls",
+    "opacity": 1,
+    "type": "tilelayer",
+    "visible": true,
+    "width": 40,
+    "x": 0,
+    "y": 0
+  }, {
+    "data": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 2, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 2, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 0, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 0, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 0, 2, 2, 0, 0, 0, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 2, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 2, 2, 0, 0, 0, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+    "height": 30,
+    "id": 4,
+    "name": "floor",
     "opacity": 1,
     "type": "tilelayer",
     "visible": true,
@@ -5020,11 +5060,11 @@ module.exports = {
     "x": 0,
     "y": 0
   }],
-  "nextlayerid": 3,
+  "nextlayerid": 5,
   "nextobjectid": 39,
   "orientation": "orthogonal",
   "renderorder": "right-down",
-  "tiledversion": "1.2.4",
+  "tiledversion": "1.3.1",
   "tileheight": 16,
   "tilesets": [{
     "columns": 3,
@@ -5051,70 +5091,332 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.loadAssets = loadAssets;
+exports.loadSprite = loadSprite;
+exports.loadAnimatedPlayer = loadAnimatedPlayer;
+exports.loadTiles = loadTiles;
 
 var _kontra = require("../kontra/kontra.js");
 
+function loadAssets() {}
+
+function loadSprite() {}
+
+function loadAnimatedPlayer(imageSrc) {
+  return new Promise(function (resolve) {
+    var image = new Image();
+    image.src = imageSrc;
+
+    image.onload = function () {
+      var spriteSheet = (0, _kontra.SpriteSheet)({
+        image: image,
+        frameWidth: 16,
+        frameHeight: 16,
+        animations: {
+          idle: {
+            frames: "0",
+            frameRate: 0
+          },
+          up: {
+            frames: "6..8",
+            frameRate: 6
+          },
+          down: {
+            frames: "0..2",
+            frameRate: 6
+          },
+          left: {
+            frames: "3..5",
+            frameRate: 6
+          },
+          right: {
+            frames: "3..5",
+            frameRate: 6
+          }
+        }
+      });
+      var sprite = (0, _kontra.Sprite)({
+        x: 100,
+        y: 100,
+        // use the sprite sheet animations for the sprite
+        animations: spriteSheet.animations
+      });
+      resolve(sprite);
+    };
+  });
+}
+
+function loadTiles(mapJson, tilesImage) {
+  return new Promise(function (resolve) {
+    return (0, _kontra.load)(tilesImage).then(function (img) {
+      mapJson.tilesets[0].image = tilesImage;
+      var tileEngine = (0, _kontra.TileEngine)(mapJson);
+      resolve(tileEngine);
+    });
+  });
+}
+},{"../kontra/kontra.js":"kontra/kontra.js"}],"js/controller.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.KeyboardController = void 0;
+
+var _kontra = require("../kontra/kontra.js");
+
+var _index = require("../helpers/index");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var KeyboardController =
+/*#__PURE__*/
+function () {
+  function KeyboardController() {
+    _classCallCheck(this, KeyboardController);
+
+    (0, _kontra.initKeys)();
+  }
+
+  _createClass(KeyboardController, [{
+    key: "update",
+    value: function update() {
+      var dirs = {
+        x: 0,
+        y: 0
+      };
+
+      if ((0, _kontra.keyPressed)("left")) {
+        dirs.x = -1;
+      }
+
+      if ((0, _kontra.keyPressed)("up")) {
+        dirs.y = -1;
+      }
+
+      if ((0, _kontra.keyPressed)("right")) {
+        dirs.x = 1;
+      }
+
+      if ((0, _kontra.keyPressed)("down")) {
+        dirs.y = 1;
+      }
+
+      return (0, _index.normalize)(dirs);
+    }
+  }]);
+
+  return KeyboardController;
+}();
+
+exports.KeyboardController = KeyboardController;
+},{"../kontra/kontra.js":"kontra/kontra.js","../helpers/index":"helpers/index.ts"}],"js/player.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Player = void 0;
+
+var _assets = require("./assets");
+
+var _controller = require("./controller");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Player =
+/*#__PURE__*/
+function () {
+  function Player(playerImg) {
+    _classCallCheck(this, Player);
+
+    this.speed = 2;
+    this.controller = new _controller.KeyboardController();
+  }
+
+  _createClass(Player, [{
+    key: "load",
+    value: function load(playerImg) {
+      var _this = this;
+
+      return new Promise(function (resolve) {
+        (0, _assets.loadAnimatedPlayer)(playerImg).then(function (loadedPlayer) {
+          _this.body = loadedPlayer;
+          _this.initialWidth = _this.body.width;
+          resolve(_this.body);
+        });
+      });
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      if (this.body) {
+        var dirs = this.controller.update();
+        this.body.dx = dirs.x * this.speed;
+        this.body.dy = dirs.y * this.speed;
+        this.body.update();
+        this.setAnimation();
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (this.body) {
+        this.body.render();
+      }
+    }
+  }, {
+    key: "setAnimation",
+    value: function setAnimation() {
+      // Change animation based on velocity
+      if (this.body.dy < 0) {
+        this.body.playAnimation("up");
+      }
+
+      if (this.body.dy > 0) {
+        this.body.playAnimation("down");
+      }
+
+      if (this.body.dx < 0) {
+        this.body.playAnimation("left");
+        this.unflip();
+      }
+
+      if (this.body.dx > 0) {
+        this.body.playAnimation("right");
+        this.flip();
+      }
+
+      if (this.body.dx === 0 && this.body.dy === 0) {
+        this.body.playAnimation("idle");
+      }
+    }
+  }, {
+    key: "flip",
+    value: function flip() {
+      this.body.width = -this.initialWidth;
+    }
+  }, {
+    key: "unflip",
+    value: function unflip() {
+      this.body.width = this.initialWidth;
+    }
+  }]);
+
+  return Player;
+}();
+
+exports.Player = Player;
+},{"./assets":"js/assets.ts","./controller":"js/controller.ts"}],"js/game.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Game = void 0;
+
 var _tiles = _interopRequireDefault(require("../maps/tiles.png"));
+
+var _player = _interopRequireDefault(require("../assets/images/player.png"));
 
 var _map = _interopRequireDefault(require("../maps/map.json"));
 
+var _assets = require("./assets");
+
+var _player2 = require("./player");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var assetsLoaded = 0;
-console.log(_map.default);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function loadAssets() {
-  (0, _kontra.on)("assetLoaded", function (asset, url) {
-    assetsLoaded++;
-  });
-  var loadingImages = (0, _kontra.load)(_tiles.default);
-  Promise.all([loadingImages]).then(function (assets) {
-    _map.default.tilesets[0].image = _tiles.default;
-    var tileEngine = (0, _kontra.TileEngine)(_map.default);
-    var sprite = (0, _kontra.Sprite)({
-      x: 100,
-      y: 80,
-      color: 'red',
-      width: 20,
-      height: 40,
-      dx: 0 // move the sprite 2px to the right every frame
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-    });
-    tileEngine.addObject(sprite);
-    tileEngine.render();
-    sprite.render();
-    console.log("GAME CAN START NOW");
-  }).catch(function (err) {
-    console.log(err);
-  });
-  return true;
-} // load('assets/imgs/mapPack_tilesheet.png', 'assets/data/tile_engine_basic.json')
-//   .then(assets => {
-//     let tileEngine = TileEngine(dataAssets['assets/data/tile_engine_basic']);
-//     tileEngine.render();
-//   });
-},{"../kontra/kontra.js":"kontra/kontra.js","../maps/tiles.png":"maps/tiles.png","../maps/map.json":"maps/map.json"}],"js/index.ts":[function(require,module,exports) {
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Game =
+/*#__PURE__*/
+function () {
+  function Game() {
+    _classCallCheck(this, Game);
+
+    this.ready = false;
+    this.player = new _player2.Player(_player.default);
+  }
+
+  _createClass(Game, [{
+    key: "load",
+    value: function load() {
+      var _this = this;
+
+      console.log("loading game assets");
+      (0, _assets.loadTiles)(_map.default, _tiles.default).then(function (tiles) {
+        console.log(_map.default);
+        _this.tiles = tiles;
+
+        _this.player.load(_player.default).then(function (body) {
+          _this.ready = true;
+        });
+      });
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      if (this.ready) {
+        if (this.tiles.layerCollidesWith("walls", this.player.body)) {
+          console.log(this.player.body);
+        }
+
+        this.player.update();
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (this.ready) {
+        this.tiles.render();
+        this.player.render();
+      }
+    }
+  }]);
+
+  return Game;
+}();
+
+exports.Game = Game;
+},{"../maps/tiles.png":"maps/tiles.png","../assets/images/player.png":"assets/images/player.png","../maps/map.json":"maps/map.json","./assets":"js/assets.ts","./player":"js/player.ts"}],"js/index.ts":[function(require,module,exports) {
 "use strict";
 
 var _kontra = require("../kontra/kontra.js");
 
-var _helpers = require("../helpers");
+var _index = require("../helpers/index");
 
-var _assets = require("./assets");
+var _game = require("./game");
 
-// import mapImage from "../maps/tiles.png";
-// import { loadAssets } from "./assets.ts";
 var _init = (0, _kontra.init)(),
     canvas = _init.canvas,
     context = _init.context;
 
-(0, _assets.loadAssets)();
-(0, _helpers.configCanvas)(canvas, 800, 800, "#111111"); // context.scale(2, 2);
-// canvas.style.imageRendering = "crisp-edges";
-// let img = new Image();
-// img.src = mapImage;
-// console.log($(".bling"));
-},{"../kontra/kontra.js":"kontra/kontra.js","../helpers":"helpers/index.ts","./assets":"js/assets.ts"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+(0, _index.configCanvas)(canvas, 640, 512, "#111111"); // Manage loading screen and all.
+
+var game = new _game.Game();
+game.load();
+var loop = (0, _kontra.GameLoop)({
+  update: function update() {
+    game.update();
+  },
+  render: function render() {
+    game.render();
+  }
+});
+loop.start(); // start the game
+},{"../kontra/kontra.js":"kontra/kontra.js","../helpers/index":"helpers/index.ts","./game":"js/game.ts"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -5142,7 +5444,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44063" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39105" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

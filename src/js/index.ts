@@ -1,21 +1,30 @@
-import { TileEngine, init, dataAssets } from "../kontra/kontra.js";
-// import mapImage from "../maps/tiles.png";
-// import { loadAssets } from "./assets.ts";
-
-import { $, $$, configCanvas } from "../helpers";
-import { loadAssets } from "./assets";
+import {
+  TileEngine,
+  init,
+  dataAssets,
+  GameLoop,
+  Sprite,
+  SpriteSheet
+} from "../kontra/kontra.js";
+import { $, $$, configCanvas } from "../helpers/index";
+import { Game } from "./game";
 
 let { canvas, context } = init();
 
-loadAssets();
+configCanvas(canvas, 640, 512, "#111111");
 
-configCanvas(canvas, 800, 800, "#111111");
-// context.scale(2, 2);
-// canvas.style.imageRendering = "crisp-edges";
+// Manage loading screen and all.
 
-// let img = new Image();
-// img.src = mapImage;
+const game = new Game();
+game.load();
 
-// console.log($(".bling"));
+let loop = GameLoop({
+  update: function() {
+    game.update();
+  },
+  render: function() {
+    game.render();
+  }
+});
 
-
+loop.start(); // start the game

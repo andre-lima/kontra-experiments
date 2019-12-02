@@ -2,53 +2,72 @@ import {
   load,
   loadData,
   loadImage,
+  SpriteSheet,
+  Animation,
   on,
   TileEngine,
   dataAssets,
   Sprite
 } from "../kontra/kontra.js";
-import tilesImage from "../maps/tiles.png";
-import mapJson from "../maps/map.json";
-let assetsLoaded = 0;
-console.log(mapJson);
 
-export function loadAssets() {
-  on("assetLoaded", (asset: any, url: any) => {
-    assetsLoaded++;
+export function loadAssets() {}
+
+export function loadSprite() {}
+
+export function loadAnimatedPlayer(imageSrc) {
+  return new Promise(resolve => {
+    let image = new Image();
+    image.src = imageSrc;
+
+    image.onload = function() {
+      let spriteSheet = SpriteSheet({
+        image: image,
+        frameWidth: 16,
+        frameHeight: 16,
+        animations: {
+          idle: {
+            frames: "0",
+            frameRate: 0
+          },
+          up: {
+            frames: "6..8", // frames 0 through 9
+            frameRate: 6
+          },
+          down: {
+            frames: "0..2", // frames 0 through 9
+            frameRate: 6
+          },
+          left: {
+            frames: "3..5", // frames 0 through 9
+            frameRate: 6
+          },
+          right: {
+            frames: "3..5", // frames 0 through 9
+            frameRate: 6
+          }
+        }
+      });
+
+      let sprite = Sprite({
+        x: 100,
+        y: 100,
+
+        // use the sprite sheet animations for the sprite
+        animations: spriteSheet.animations
+      });
+
+      resolve(sprite);
+    };
   });
+}
 
-  const loadingImages = load(tilesImage);
-
-  Promise.all([loadingImages])
-    .then(function(assets: any) {
+export function loadTiles(mapJson, tilesImage) {
+  return new Promise(resolve => {
+    return load(tilesImage).then(img => {
       mapJson.tilesets[0].image = tilesImage;
       let tileEngine = TileEngine(mapJson);
 
-      let sprite = Sprite({
-        x: 100,        // starting x,y position of the sprite
-        y: 80,
-        color: 'red',  // fill color of the sprite rectangle
-        width: 20,     // width and height of the sprite rectangle
-        height: 40,
-        dx: 0          // move the sprite 2px to the right every frame
-      });
-
-      tileEngine.addObject(sprite)
-      tileEngine.render();
-      sprite.render();
-
-
-      console.log("GAME CAN START NOW");
-    })
-    .catch(function(err: any) {
-      console.log(err);
+      resolve(tileEngine);
     });
-
-  return true;
+  });
 }
-
-// load('assets/imgs/mapPack_tilesheet.png', 'assets/data/tile_engine_basic.json')
-//   .then(assets => {
-//     let tileEngine = TileEngine(dataAssets['assets/data/tile_engine_basic']);
-//     tileEngine.render();
-//   });
