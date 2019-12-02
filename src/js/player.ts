@@ -1,7 +1,9 @@
-import { Sprite } from "../../declarations/kontra";
+// import { Sprite } from "../../declarations/kontra";
 import { loadAnimatedPlayer } from "./assets";
 import { KeyboardController } from "./controller";
 import { Log } from "../helpers/log";
+import renderChildrenPlugin from "../plugins/renderChildren";
+import { registerPlugin, Sprite } from "../kontra/kontra";
 
 export class Player {
   protected speed = 2;
@@ -21,6 +23,17 @@ export class Player {
         this.body.x = posX;
         this.body.y = posY;
         this.speed = speed;
+
+        registerPlugin(Sprite, renderChildrenPlugin);
+
+        this.body.addChild(Sprite({
+          x: 10,
+          y: 20,
+          width: 10,
+          height: 10,
+          color: 'red'
+        }));
+
         resolve(this.body);
       });
     });

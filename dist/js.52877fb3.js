@@ -2646,91 +2646,6 @@ function vectorFactory(x, y) {
 
 vectorFactory.prototype = Vector.prototype;
 vectorFactory.class = Vector;
-},{}],"helpers/log.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Log = void 0;
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Log =
-/*#__PURE__*/
-function () {
-  function Log() {
-    _classCallCheck(this, Log);
-  }
-
-  _createClass(Log, null, [{
-    key: "q",
-    value: function q(value) {
-      var category = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "general";
-      Log.logs[category] = value;
-
-      if (!Log.logging) {
-        Log.logging = true;
-        Log.startLogging();
-      }
-    }
-  }, {
-    key: "fps",
-    value: function fps() {
-      var thisLoop = Date.now();
-      var fps = 1000 / (thisLoop - this.lastLoop);
-      fps = Math.floor(fps);
-      this.lastLoop = thisLoop;
-      Log.logs.fps = fps;
-    }
-  }, {
-    key: "startLogging",
-    value: function startLogging() {
-      this.dashboard = document.createElement("div");
-      this.dashboard.classList.add("dashboard");
-      document.body.append(this.dashboard);
-      setInterval(function () {
-        Object.entries(Log.logs).forEach(function (value) {
-          console.log(_typeof(value[1]));
-
-          if (typeof value[1] === "number") {
-            value[1] = value[1].toFixed(2);
-          }
-
-          Log.addToDashboard(value[0], value[1]);
-        });
-      }, 250);
-    }
-  }, {
-    key: "addToDashboard",
-    value: function addToDashboard(category, value) {
-      var entry = document.querySelector("." + category);
-
-      if (entry) {
-        entry.textContent = category + " : " + value;
-        return;
-      }
-
-      entry = document.createElement("div");
-      entry.classList.add(category);
-      entry.append(document.createTextNode(category + " : " + value));
-      this.dashboard.append(entry);
-    }
-  }]);
-
-  return Log;
-}();
-
-exports.Log = Log;
-Log.logs = {};
-Log.logging = false;
-Log.lastLoop = Date.now();
 },{}],"kontra/sprite.js":[function(require,module,exports) {
 "use strict";
 
@@ -2742,8 +2657,6 @@ exports.default = spriteFactory;
 var _core = require("./core.js");
 
 var _vector = _interopRequireDefault(require("./vector.js"));
-
-var _log = require("../helpers/log.ts");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2914,10 +2827,10 @@ function () {
        */
 
       /**
-       * The image the sprite will use when drawn if passed as an argument.
-       * @memberof Sprite
-       * @property {Image|HTMLCanvasElement} image
-       */
+      * The image the sprite will use when drawn if passed as an argument.
+      * @memberof Sprite
+      * @property {Image|HTMLCanvasElement} image
+      */
       // add all properties to the sprite, overriding any defaults
 
       for (var prop in properties) {
@@ -3034,7 +2947,6 @@ function () {
   }, {
     key: "collidesWith",
     value: function collidesWith(object) {
-      // console.log(object);
       if (this.rotation || object.rotation) return null; // take into account sprite anchors
 
       var x = this.x - this.width * this.anchor.x;
@@ -3046,14 +2958,6 @@ function () {
         objX -= object.width * object.anchor.x;
         objY -= object.height * object.anchor.y;
       }
-
-      _log.Log.q([x, y], "collision"); // console.log(
-      //   x < objX + object.width &&
-      //     x + this.width > objX &&
-      //     y < objY + object.height &&
-      //     y + this.height > objY
-      // );
-
 
       return x < objX + object.width && x + this.width > objX && y < objY + object.height && y + this.height > objY;
     }
@@ -3446,13 +3350,15 @@ function () {
   return Sprite;
 }();
 
+;
+
 function spriteFactory(properties) {
   return new Sprite(properties);
 }
 
 spriteFactory.prototype = Sprite.prototype;
 spriteFactory.class = Sprite;
-},{"./core.js":"kontra/core.js","./vector.js":"kontra/vector.js","../helpers/log.ts":"helpers/log.ts"}],"kontra/spriteSheet.js":[function(require,module,exports) {
+},{"./core.js":"kontra/core.js","./vector.js":"kontra/vector.js"}],"kontra/spriteSheet.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4718,7 +4624,19 @@ var _vector = _interopRequireDefault(require("./vector.js"));
 var _kontraDefaults = _interopRequireDefault(require("./kontra.defaults.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./animation.js":"kontra/animation.js","./assets.js":"kontra/assets.js","./core.js":"kontra/core.js","./events.js":"kontra/events.js","./gameLoop.js":"kontra/gameLoop.js","./keyboard.js":"kontra/keyboard.js","./plugin.js":"kontra/plugin.js","./pointer.js":"kontra/pointer.js","./pool.js":"kontra/pool.js","./quadtree.js":"kontra/quadtree.js","./sprite.js":"kontra/sprite.js","./spriteSheet.js":"kontra/spriteSheet.js","./store.js":"kontra/store.js","./tileEngine.js":"kontra/tileEngine.js","./vector.js":"kontra/vector.js","./kontra.defaults.js":"kontra/kontra.defaults.js"}],"helpers/index.ts":[function(require,module,exports) {
+},{"./animation.js":"kontra/animation.js","./assets.js":"kontra/assets.js","./core.js":"kontra/core.js","./events.js":"kontra/events.js","./gameLoop.js":"kontra/gameLoop.js","./keyboard.js":"kontra/keyboard.js","./plugin.js":"kontra/plugin.js","./pointer.js":"kontra/pointer.js","./pool.js":"kontra/pool.js","./quadtree.js":"kontra/quadtree.js","./sprite.js":"kontra/sprite.js","./spriteSheet.js":"kontra/spriteSheet.js","./store.js":"kontra/store.js","./tileEngine.js":"kontra/tileEngine.js","./vector.js":"kontra/vector.js","./kontra.defaults.js":"kontra/kontra.defaults.js"}],"plugins/extendSprite.ts":[function(require,module,exports) {
+"use strict";
+
+var _kontra = require("../kontra/kontra.js");
+
+(0, _kontra.extendObject)(_kontra.Sprite, {
+  children: [],
+  addChild: function addChild(child) {
+    console.log('Adding child: ', child, this.children);
+    this.children.push(child);
+  }
+});
+},{"../kontra/kontra.js":"kontra/kontra.js"}],"helpers/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5307,7 +5225,102 @@ function () {
 }();
 
 exports.KeyboardController = KeyboardController;
-},{"../kontra/kontra.js":"kontra/kontra.js","../helpers/index":"helpers/index.ts"}],"js/player.ts":[function(require,module,exports) {
+},{"../kontra/kontra.js":"kontra/kontra.js","../helpers/index":"helpers/index.ts"}],"helpers/log.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Log = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Log =
+/*#__PURE__*/
+function () {
+  function Log() {
+    _classCallCheck(this, Log);
+  }
+
+  _createClass(Log, null, [{
+    key: "q",
+    value: function q(value) {
+      var category = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "general";
+      Log.logs[category] = value;
+
+      if (!Log.logging) {
+        Log.logging = true;
+        Log.startLogging();
+      }
+    }
+  }, {
+    key: "fps",
+    value: function fps() {
+      var thisLoop = Date.now();
+      var fps = 1000 / (thisLoop - this.lastLoop);
+      fps = Math.floor(fps);
+      this.lastLoop = thisLoop;
+      Log.logs.fps = fps;
+    }
+  }, {
+    key: "startLogging",
+    value: function startLogging() {
+      this.dashboard = document.createElement("div");
+      this.dashboard.classList.add("dashboard");
+      document.body.append(this.dashboard);
+      setInterval(function () {
+        Object.entries(Log.logs).forEach(function (value) {
+          // console.log(typeof value[1]);
+          if (typeof value[1] === "number") {
+            value[1] = value[1].toFixed(2);
+          }
+
+          Log.addToDashboard(value[0], value[1]);
+        });
+      }, 250);
+    }
+  }, {
+    key: "addToDashboard",
+    value: function addToDashboard(category, value) {
+      var entry = document.querySelector("." + category);
+
+      if (entry) {
+        entry.textContent = category + " : " + value;
+        return;
+      }
+
+      entry = document.createElement("div");
+      entry.classList.add(category);
+      entry.append(document.createTextNode(category + " : " + value));
+      this.dashboard.append(entry);
+    }
+  }]);
+
+  return Log;
+}();
+
+exports.Log = Log;
+Log.logs = {};
+Log.logging = false;
+Log.lastLoop = Date.now();
+},{}],"plugins/renderChildren.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var renderChildrenPlugin = {
+  afterUpdate: function afterUpdate(sprite, result, object) {// console.log(sprite.children);
+  }
+};
+var _default = renderChildrenPlugin;
+exports.default = _default;
+},{}],"js/player.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5320,6 +5333,12 @@ var _assets = require("./assets");
 var _controller = require("./controller");
 
 var _log = require("../helpers/log");
+
+var _renderChildren = _interopRequireDefault(require("../plugins/renderChildren"));
+
+var _kontra = require("../kontra/kontra");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5349,6 +5368,16 @@ function () {
           _this.body.x = posX;
           _this.body.y = posY;
           _this.speed = speed;
+          (0, _kontra.registerPlugin)(_kontra.Sprite, _renderChildren.default);
+
+          _this.body.addChild((0, _kontra.Sprite)({
+            x: 10,
+            y: 20,
+            width: 10,
+            height: 10,
+            color: 'red'
+          }));
+
           resolve(_this.body);
         });
       });
@@ -5416,7 +5445,7 @@ function () {
 }();
 
 exports.Player = Player;
-},{"./assets":"js/assets.ts","./controller":"js/controller.ts","../helpers/log":"helpers/log.ts"}],"js/game.ts":[function(require,module,exports) {
+},{"./assets":"js/assets.ts","./controller":"js/controller.ts","../helpers/log":"helpers/log.ts","../plugins/renderChildren":"plugins/renderChildren.ts","../kontra/kontra":"kontra/kontra.js"}],"js/game.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5503,6 +5532,8 @@ exports.Game = Game;
 
 var _kontra = require("../kontra/kontra.js");
 
+require("../plugins/extendSprite");
+
 var _index = require("../helpers/index");
 
 var _game = require("./game");
@@ -5528,7 +5559,7 @@ var loop = (0, _kontra.GameLoop)({
   }
 });
 loop.start(); // start the game
-},{"../kontra/kontra.js":"kontra/kontra.js","../helpers/index":"helpers/index.ts","./game":"js/game.ts","../helpers/log":"helpers/log.ts"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../kontra/kontra.js":"kontra/kontra.js","../plugins/extendSprite":"plugins/extendSprite.ts","../helpers/index":"helpers/index.ts","./game":"js/game.ts","../helpers/log":"helpers/log.ts"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -5556,7 +5587,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42041" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33441" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

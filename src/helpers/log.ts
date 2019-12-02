@@ -28,7 +28,7 @@ export class Log {
 
     setInterval(function() {
       Object.entries(Log.logs).forEach(value => {
-        console.log(typeof value[1]);
+        // console.log(typeof value[1]);
         if (typeof value[1] === "number") {
           value[1] = value[1].toFixed(2);
         }
