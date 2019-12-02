@@ -4630,9 +4630,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var _kontra = require("../kontra/kontra.js");
 
 (0, _kontra.extendObject)(_kontra.Sprite, {
-  children: [],
   addChild: function addChild(child) {
-    console.log('Adding child: ', child, this.children);
     this.children.push(child);
   }
 });
@@ -5315,7 +5313,21 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var renderChildrenPlugin = {
-  afterUpdate: function afterUpdate(sprite, result, object) {// console.log(sprite.children);
+  afterUpdate: function afterUpdate(sprite, result, object) {
+    if (sprite.children) {
+      sprite.children.forEach(function (c) {
+        c.x = sprite.x;
+        c.y = sprite.y;
+        c.update();
+      });
+    }
+  },
+  afterRender: function afterRender(sprite, result, object) {
+    if (sprite.children) {
+      sprite.children.forEach(function (c) {
+        c.render();
+      });
+    }
   }
 };
 var _default = renderChildrenPlugin;
@@ -5353,6 +5365,7 @@ function () {
     _classCallCheck(this, Player);
 
     this.speed = 2;
+    this.children = [];
     this.controller = new _controller.KeyboardController();
   }
 
@@ -5368,15 +5381,17 @@ function () {
           _this.body.x = posX;
           _this.body.y = posY;
           _this.speed = speed;
+          _this.body.children = [];
           (0, _kontra.registerPlugin)(_kontra.Sprite, _renderChildren.default);
+          _this.collider = (0, _kontra.Sprite)({
+            x: 0,
+            y: 0,
+            width: 5,
+            height: 5,
+            color: "red"
+          });
 
-          _this.body.addChild((0, _kontra.Sprite)({
-            x: 10,
-            y: 20,
-            width: 10,
-            height: 10,
-            color: 'red'
-          }));
+          _this.body.addChild(_this.collider);
 
           resolve(_this.body);
         });
@@ -5389,7 +5404,8 @@ function () {
         var dirs = this.controller.update();
         this.body.dx = dirs.x * this.speed;
         this.body.dy = dirs.y * this.speed;
-        this.body.update();
+        this.body.update(); // this.collider.update();
+
         this.setAnimation();
       }
     }
@@ -5399,8 +5415,7 @@ function () {
       if (this.body) {
         this.body.render();
 
-        _log.Log.q(this.body.x); // console.log(this.body.x, this.body.y);
-
+        _log.Log.q(this.body.x);
       }
     }
   }, {
@@ -5516,7 +5531,7 @@ function () {
     key: "render",
     value: function render() {
       if (this.ready) {
-        this.tiles.render();
+        // this.tiles.render();
         this.player.render();
         this.player2.render();
       }
@@ -5587,7 +5602,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33441" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41269" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

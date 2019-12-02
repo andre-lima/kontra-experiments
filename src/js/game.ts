@@ -43,7 +43,7 @@ export class Game {
 
   render() {
     if (this.ready) {
-      this.tiles.render();
+      // this.tiles.render();
       this.player.render();
       this.player2.render();
     }

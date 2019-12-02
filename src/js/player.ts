@@ -8,6 +8,8 @@ import { registerPlugin, Sprite } from "../kontra/kontra";
 export class Player {
   protected speed = 2;
   public body: Sprite;
+  public collider: Sprite;
+  public children = [];
   private initialWidth: number;
   private controller: KeyboardController;
 
@@ -24,15 +26,19 @@ export class Player {
         this.body.y = posY;
         this.speed = speed;
 
+        this.body.children = []
+
         registerPlugin(Sprite, renderChildrenPlugin);
 
-        this.body.addChild(Sprite({
-          x: 10,
-          y: 20,
-          width: 10,
-          height: 10,
-          color: 'red'
-        }));
+        this.collider = Sprite({
+          x: 0,
+          y: 0,
+          width: 5,
+          height: 5,
+          color: "red"
+        });
+
+        this.body.addChild(this.collider);
 
         resolve(this.body);
       });
@@ -46,6 +52,8 @@ export class Player {
       this.body.dy = dirs.y * this.speed;
 
       this.body.update();
+
+      // this.collider.update();
       this.setAnimation();
     }
   }
@@ -54,7 +62,6 @@ export class Player {
     if (this.body) {
       this.body.render();
       Log.q(this.body.x);
-      // console.log(this.body.x, this.body.y);
     }
   }
 
@@ -87,34 +94,4 @@ export class Player {
     this.body.width = this.initialWidth;
   }
 
-  // collidesWith(object) {
-
-  //   if (this.body.rotation || object.rotation) return null;
-
-  //   // take into account sprite anchors
-  //   let x = this.body.x - this.body.width * this.body.anchor.x;
-  //   let y = this.body.y - this.body.height * this.body.anchor.y;
-
-  //   let objX = object.x;
-  //   let objY = object.y;
-  //   if (object.anchor) {
-  //     objX -= object.width * object.anchor.x;
-  //     objY -= object.height * object.anchor.y;
-  //   }
-
-  //   console.log(
-  //     "jjj",
-  //     x < objX + object.width &&
-  //       x + this.body.width > objX &&
-  //       y < objY + object.height &&
-  //       y + this.body.height > objY
-  //   );
-
-  //   return (
-  //     x < objX + object.width &&
-  //     x + this.body.width > objX &&
-  //     y < objY + object.height &&
-  //     y + this.body.height > objY
-  //   );
-  // }
 }
