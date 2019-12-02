@@ -8,6 +8,7 @@ import {
 } from "../kontra/kontra.js";
 import { $, $$, configCanvas } from "../helpers/index";
 import { Game } from "./game";
+import { Log } from "../helpers/log";
 
 let { canvas, context } = init();
 
@@ -24,6 +25,7 @@ let loop = GameLoop({
   },
   render: function() {
     game.render();
+    Log.fps();
   }
 });
 

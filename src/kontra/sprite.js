@@ -1,5 +1,6 @@
-import { getContext } from './core.js'
-import Vector from './vector.js'
+import { getContext } from "./core.js";
+import Vector from "./vector.js";
+import { Log } from "../helpers/log.ts";
 
 /**
  * A versatile way to update and draw your game objects. It can handle simple rectangles, images, and sprite sheet animations. It can be used for your main player object as well as tiny particles in a particle engine.
@@ -131,7 +132,7 @@ class Sprite {
      * sprite.x = 450;
      * sprite.render();
      */
-    this.anchor = {x: 0, y: 0};
+    this.anchor = { x: 0, y: 0 };
 
     /**
      * The context the sprite will draw to.
@@ -146,7 +147,7 @@ class Sprite {
      * @property {String} color
      */
 
-     /**
+    /**
      * The image the sprite will use when drawn if passed as an argument.
      * @memberof Sprite
      * @property {Image|HTMLCanvasElement} image
@@ -159,8 +160,8 @@ class Sprite {
 
     // image sprite
     if (image) {
-      this.width = (width !== undefined) ? width : image.width;
-      this.height = (height !== undefined) ? height : image.height;
+      this.width = width !== undefined ? width : image.width;
+      this.height = height !== undefined ? height : image.height;
     }
 
     /**
@@ -362,7 +363,7 @@ class Sprite {
   set width(value) {
     let sign = value < 0 ? -1 : 1;
 
-    this._fx = sign
+    this._fx = sign;
     this._w = value * sign;
   }
   set height(value) {
@@ -448,6 +449,7 @@ class Sprite {
    * @returns {Boolean|null} `true` if the objects collide, `false` otherwise. Will return `null` if the either of the two objects are rotated.
    */
   collidesWith(object) {
+    // console.log(object);
     if (this.rotation || object.rotation) return null;
 
     // take into account sprite anchors
@@ -461,10 +463,20 @@ class Sprite {
       objY -= object.height * object.anchor.y;
     }
 
-    return x < objX + object.width &&
-           x + this.width > objX &&
-           y < objY + object.height &&
-           y + this.height > objY;
+    Log.q([x, y], "collision");
+    // console.log(
+    //   x < objX + object.width &&
+    //     x + this.width > objX &&
+    //     y < objY + object.height &&
+    //     y + this.height > objY
+    // );
+
+    return (
+      x < objX + object.width &&
+      x + this.width > objX &&
+      y < objY + object.height &&
+      y + this.height > objY
+    );
   }
 
   /**
@@ -630,11 +642,16 @@ class Sprite {
     if (this.image) {
       this.context.drawImage(
         this.image,
-        0, 0, this.image.width, this.image.height,
-        anchorWidth, anchorHeight, this.width, this.height
+        0,
+        0,
+        this.image.width,
+        this.image.height,
+        anchorWidth,
+        anchorHeight,
+        this.width,
+        this.height
       );
-    }
-    else if (this.currentAnimation) {
+    } else if (this.currentAnimation) {
       this.currentAnimation.render({
         x: anchorWidth,
         y: anchorHeight,
@@ -642,15 +659,14 @@ class Sprite {
         height: this.height,
         context: this.context
       });
-    }
-    else {
+    } else {
       this.context.fillStyle = this.color;
       this.context.fillRect(anchorWidth, anchorHeight, this.width, this.height);
     }
 
     this.context.restore();
   }
-};
+}
 
 export default function spriteFactory(properties) {
   return new Sprite(properties);

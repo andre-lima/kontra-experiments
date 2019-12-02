@@ -2646,6 +2646,91 @@ function vectorFactory(x, y) {
 
 vectorFactory.prototype = Vector.prototype;
 vectorFactory.class = Vector;
+},{}],"helpers/log.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Log = void 0;
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Log =
+/*#__PURE__*/
+function () {
+  function Log() {
+    _classCallCheck(this, Log);
+  }
+
+  _createClass(Log, null, [{
+    key: "q",
+    value: function q(value) {
+      var category = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "general";
+      Log.logs[category] = value;
+
+      if (!Log.logging) {
+        Log.logging = true;
+        Log.startLogging();
+      }
+    }
+  }, {
+    key: "fps",
+    value: function fps() {
+      var thisLoop = Date.now();
+      var fps = 1000 / (thisLoop - this.lastLoop);
+      fps = Math.floor(fps);
+      this.lastLoop = thisLoop;
+      Log.logs.fps = fps;
+    }
+  }, {
+    key: "startLogging",
+    value: function startLogging() {
+      this.dashboard = document.createElement("div");
+      this.dashboard.classList.add("dashboard");
+      document.body.append(this.dashboard);
+      setInterval(function () {
+        Object.entries(Log.logs).forEach(function (value) {
+          console.log(_typeof(value[1]));
+
+          if (typeof value[1] === "number") {
+            value[1] = value[1].toFixed(2);
+          }
+
+          Log.addToDashboard(value[0], value[1]);
+        });
+      }, 250);
+    }
+  }, {
+    key: "addToDashboard",
+    value: function addToDashboard(category, value) {
+      var entry = document.querySelector("." + category);
+
+      if (entry) {
+        entry.textContent = category + " : " + value;
+        return;
+      }
+
+      entry = document.createElement("div");
+      entry.classList.add(category);
+      entry.append(document.createTextNode(category + " : " + value));
+      this.dashboard.append(entry);
+    }
+  }]);
+
+  return Log;
+}();
+
+exports.Log = Log;
+Log.logs = {};
+Log.logging = false;
+Log.lastLoop = Date.now();
 },{}],"kontra/sprite.js":[function(require,module,exports) {
 "use strict";
 
@@ -2657,6 +2742,8 @@ exports.default = spriteFactory;
 var _core = require("./core.js");
 
 var _vector = _interopRequireDefault(require("./vector.js"));
+
+var _log = require("../helpers/log.ts");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2827,10 +2914,10 @@ function () {
        */
 
       /**
-      * The image the sprite will use when drawn if passed as an argument.
-      * @memberof Sprite
-      * @property {Image|HTMLCanvasElement} image
-      */
+       * The image the sprite will use when drawn if passed as an argument.
+       * @memberof Sprite
+       * @property {Image|HTMLCanvasElement} image
+       */
       // add all properties to the sprite, overriding any defaults
 
       for (var prop in properties) {
@@ -2947,6 +3034,7 @@ function () {
   }, {
     key: "collidesWith",
     value: function collidesWith(object) {
+      // console.log(object);
       if (this.rotation || object.rotation) return null; // take into account sprite anchors
 
       var x = this.x - this.width * this.anchor.x;
@@ -2958,6 +3046,14 @@ function () {
         objX -= object.width * object.anchor.x;
         objY -= object.height * object.anchor.y;
       }
+
+      _log.Log.q([x, y], "collision"); // console.log(
+      //   x < objX + object.width &&
+      //     x + this.width > objX &&
+      //     y < objY + object.height &&
+      //     y + this.height > objY
+      // );
+
 
       return x < objX + object.width && x + this.width > objX && y < objY + object.height && y + this.height > objY;
     }
@@ -3350,15 +3446,13 @@ function () {
   return Sprite;
 }();
 
-;
-
 function spriteFactory(properties) {
   return new Sprite(properties);
 }
 
 spriteFactory.prototype = Sprite.prototype;
 spriteFactory.class = Sprite;
-},{"./core.js":"kontra/core.js","./vector.js":"kontra/vector.js"}],"kontra/spriteSheet.js":[function(require,module,exports) {
+},{"./core.js":"kontra/core.js","./vector.js":"kontra/vector.js","../helpers/log.ts":"helpers/log.ts"}],"kontra/spriteSheet.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5225,6 +5319,8 @@ var _assets = require("./assets");
 
 var _controller = require("./controller");
 
+var _log = require("../helpers/log");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -5234,7 +5330,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Player =
 /*#__PURE__*/
 function () {
-  function Player(playerImg) {
+  function Player() {
     _classCallCheck(this, Player);
 
     this.speed = 2;
@@ -5243,13 +5339,16 @@ function () {
 
   _createClass(Player, [{
     key: "load",
-    value: function load(playerImg) {
+    value: function load(playerImg, posX, posY, speed) {
       var _this = this;
 
       return new Promise(function (resolve) {
         (0, _assets.loadAnimatedPlayer)(playerImg).then(function (loadedPlayer) {
           _this.body = loadedPlayer;
           _this.initialWidth = _this.body.width;
+          _this.body.x = posX;
+          _this.body.y = posY;
+          _this.speed = speed;
           resolve(_this.body);
         });
       });
@@ -5270,6 +5369,9 @@ function () {
     value: function render() {
       if (this.body) {
         this.body.render();
+
+        _log.Log.q(this.body.x); // console.log(this.body.x, this.body.y);
+
       }
     }
   }, {
@@ -5314,7 +5416,7 @@ function () {
 }();
 
 exports.Player = Player;
-},{"./assets":"js/assets.ts","./controller":"js/controller.ts"}],"js/game.ts":[function(require,module,exports) {
+},{"./assets":"js/assets.ts","./controller":"js/controller.ts","../helpers/log":"helpers/log.ts"}],"js/game.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5347,7 +5449,8 @@ function () {
     _classCallCheck(this, Game);
 
     this.ready = false;
-    this.player = new _player2.Player(_player.default);
+    this.player = new _player2.Player();
+    this.player2 = new _player2.Player();
   }
 
   _createClass(Game, [{
@@ -5357,10 +5460,13 @@ function () {
 
       console.log("loading game assets");
       (0, _assets.loadTiles)(_map.default, _tiles.default).then(function (tiles) {
-        console.log(_map.default);
         _this.tiles = tiles;
 
-        _this.player.load(_player.default).then(function (body) {
+        _this.player.load(_player.default, 100, 100, 2).then(function (body) {
+          _this.ready = true;
+        });
+
+        _this.player2.load(_player.default, 180, 100, -1).then(function (body) {
           _this.ready = true;
         });
       });
@@ -5369,11 +5475,12 @@ function () {
     key: "update",
     value: function update() {
       if (this.ready) {
-        if (this.tiles.layerCollidesWith("walls", this.player.body)) {
-          console.log(this.player.body);
+        if (this.tiles.layerCollidesWith("walls", this.player.body)) {// console.log(this.player.body);
         }
 
         this.player.update();
+        this.player2.update();
+        this.player.body.collidesWith(this.player2.body);
       }
     }
   }, {
@@ -5382,6 +5489,7 @@ function () {
       if (this.ready) {
         this.tiles.render();
         this.player.render();
+        this.player2.render();
       }
     }
   }]);
@@ -5399,6 +5507,8 @@ var _index = require("../helpers/index");
 
 var _game = require("./game");
 
+var _log = require("../helpers/log");
+
 var _init = (0, _kontra.init)(),
     canvas = _init.canvas,
     context = _init.context;
@@ -5413,10 +5523,12 @@ var loop = (0, _kontra.GameLoop)({
   },
   render: function render() {
     game.render();
+
+    _log.Log.fps();
   }
 });
 loop.start(); // start the game
-},{"../kontra/kontra.js":"kontra/kontra.js","../helpers/index":"helpers/index.ts","./game":"js/game.ts"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../kontra/kontra.js":"kontra/kontra.js","../helpers/index":"helpers/index.ts","./game":"js/game.ts","../helpers/log":"helpers/log.ts"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -5444,7 +5556,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39105" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42041" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
