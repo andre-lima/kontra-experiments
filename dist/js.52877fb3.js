@@ -4631,19 +4631,239 @@ var _kontra = require("../kontra/kontra.js");
 
 (0, _kontra.extendObject)(_kontra.Sprite, {
   addChild: function addChild(child) {
+    if (!this.children) {
+      this.children = [];
+    }
+
     this.children.push(child);
   }
 });
-},{"../kontra/kontra.js":"kontra/kontra.js"}],"helpers/index.ts":[function(require,module,exports) {
+},{"../kontra/kontra.js":"kontra/kontra.js"}],"helpers/depth-sort.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DepthSort = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+var DepthSort = {
+  sortGroup: [],
+  sortBy: 'y',
+  add: function add() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    this.sortGroup = [].concat(_toConsumableArray(this.sortGroup), args);
+  },
+  remove: function remove(itemToRemove) {
+    this.sortGroup = this.sortGroup.filter(function (item) {
+      return item !== itemToRemove;
+    });
+  },
+  emptyGroup: function emptyGroup() {
+    this.sortGroup = [];
+  },
+  render: function render() {
+    var _this = this;
+
+    this.sortGroup.sort(function (i1, i2) {
+      return i1.body[_this.sortBy] - i2.body[_this.sortBy];
+    }).forEach(function (i) {
+      return i.render();
+    });
+  }
+};
+exports.DepthSort = DepthSort;
+},{}],"helpers/log.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Log = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Log =
+/*#__PURE__*/
+function () {
+  function Log() {
+    _classCallCheck(this, Log);
+  }
+
+  _createClass(Log, null, [{
+    key: "q",
+    value: function q(value) {
+      var category = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "general";
+      Log.logs[category] = value;
+
+      if (!Log.logging) {
+        Log.logging = true;
+        Log.startLogging();
+      }
+    }
+  }, {
+    key: "fps",
+    value: function fps() {
+      var thisLoop = Date.now();
+      var fps = 1000 / (thisLoop - this.lastLoop);
+      fps = Math.floor(fps);
+      this.lastLoop = thisLoop;
+      Log.logs.fps = fps;
+    }
+  }, {
+    key: "startLogging",
+    value: function startLogging() {
+      this.dashboard = document.createElement("div");
+      this.dashboard.classList.add("dashboard");
+      document.body.append(this.dashboard);
+      setInterval(function () {
+        Object.entries(Log.logs).forEach(function (value) {
+          // console.log(typeof value[1]);
+          if (typeof value[1] === "number") {
+            value[1] = value[1].toFixed(2);
+          }
+
+          Log.addToDashboard(value[0], value[1]);
+        });
+      }, 250);
+    }
+  }, {
+    key: "addToDashboard",
+    value: function addToDashboard(category, value) {
+      var entry = document.querySelector("." + category);
+
+      if (entry) {
+        entry.textContent = category + " : " + value;
+        return;
+      }
+
+      entry = document.createElement("div");
+      entry.classList.add(category);
+      entry.append(document.createTextNode(category + " : " + value));
+      this.dashboard.append(entry);
+    }
+  }]);
+
+  return Log;
+}();
+
+exports.Log = Log;
+Log.logs = {};
+Log.logging = false;
+Log.lastLoop = Date.now();
+},{}],"helpers/collider.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Collider = void 0;
+
+var _kontra = require("../kontra/kontra");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var Collider =
+/*#__PURE__*/
+function (_Sprite$class) {
+  _inherits(Collider, _Sprite$class);
+
+  function Collider(ox, oy, ow, oh) {
+    var _this;
+
+    _classCallCheck(this, Collider);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Collider).call(this));
+    _this.ox = ox;
+    _this.oy = oy;
+    _this.ow = ow;
+    _this.oh = oh;
+    return _this;
+  }
+
+  _createClass(Collider, [{
+    key: "render",
+    value: function render() {
+      // draw the rectangle sprite normally
+      this.draw(); // outline the sprite
+
+      this.context.fillStyle = "transparent";
+      this.context.strokeStyle = "yellow";
+      this.context.lineWidth = 1;
+      this.context.strokeRect(this.x, this.y, this.width, this.height);
+    }
+  }]);
+
+  return Collider;
+}(_kontra.Sprite.class);
+
+exports.Collider = Collider;
+},{"../kontra/kontra":"kontra/kontra.js"}],"helpers/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.configCanvas = configCanvas;
-exports.distance = distance;
 exports.normalize = normalize;
+exports.distance = distance;
+Object.defineProperty(exports, "DepthSort", {
+  enumerable: true,
+  get: function () {
+    return _depthSort.DepthSort;
+  }
+});
+Object.defineProperty(exports, "Log", {
+  enumerable: true,
+  get: function () {
+    return _log.Log;
+  }
+});
+Object.defineProperty(exports, "Collider", {
+  enumerable: true,
+  get: function () {
+    return _collider.Collider;
+  }
+});
 exports.$$ = exports.$ = void 0;
+
+var _depthSort = require("./depth-sort");
+
+var _log = require("./log");
+
+var _collider = require("./collider");
+
+// OTHER HELPER FUNCTIONS BELOW
 // based on https://gist.github.com/paulirish/12fb951a8b893a454b32
 var $ = document.querySelector.bind(document);
 exports.$ = $;
@@ -4683,7 +4903,7 @@ function normalize(v) {
     };
   }
 }
-},{}],"maps/tiles.png":[function(require,module,exports) {
+},{"./depth-sort":"helpers/depth-sort.ts","./log":"helpers/log.ts","./collider":"helpers/collider.ts"}],"maps/tiles.png":[function(require,module,exports) {
 module.exports = "/tiles.92cd188e.png";
 },{}],"assets/images/player.png":[function(require,module,exports) {
 module.exports = "/player.6e7d807a.png";
@@ -5223,89 +5443,7 @@ function () {
 }();
 
 exports.KeyboardController = KeyboardController;
-},{"../kontra/kontra.js":"kontra/kontra.js","../helpers/index":"helpers/index.ts"}],"helpers/log.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Log = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Log =
-/*#__PURE__*/
-function () {
-  function Log() {
-    _classCallCheck(this, Log);
-  }
-
-  _createClass(Log, null, [{
-    key: "q",
-    value: function q(value) {
-      var category = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "general";
-      Log.logs[category] = value;
-
-      if (!Log.logging) {
-        Log.logging = true;
-        Log.startLogging();
-      }
-    }
-  }, {
-    key: "fps",
-    value: function fps() {
-      var thisLoop = Date.now();
-      var fps = 1000 / (thisLoop - this.lastLoop);
-      fps = Math.floor(fps);
-      this.lastLoop = thisLoop;
-      Log.logs.fps = fps;
-    }
-  }, {
-    key: "startLogging",
-    value: function startLogging() {
-      this.dashboard = document.createElement("div");
-      this.dashboard.classList.add("dashboard");
-      document.body.append(this.dashboard);
-      setInterval(function () {
-        Object.entries(Log.logs).forEach(function (value) {
-          // console.log(typeof value[1]);
-          if (typeof value[1] === "number") {
-            value[1] = value[1].toFixed(2);
-          }
-
-          Log.addToDashboard(value[0], value[1]);
-        });
-      }, 250);
-    }
-  }, {
-    key: "addToDashboard",
-    value: function addToDashboard(category, value) {
-      var entry = document.querySelector("." + category);
-
-      if (entry) {
-        entry.textContent = category + " : " + value;
-        return;
-      }
-
-      entry = document.createElement("div");
-      entry.classList.add(category);
-      entry.append(document.createTextNode(category + " : " + value));
-      this.dashboard.append(entry);
-    }
-  }]);
-
-  return Log;
-}();
-
-exports.Log = Log;
-Log.logs = {};
-Log.logging = false;
-Log.lastLoop = Date.now();
-},{}],"plugins/renderChildren.ts":[function(require,module,exports) {
+},{"../kontra/kontra.js":"kontra/kontra.js","../helpers/index":"helpers/index.ts"}],"plugins/renderChildren.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5346,7 +5484,7 @@ var _assets = require("./assets");
 
 var _controller = require("./controller");
 
-var _log = require("../helpers/log");
+var _index = require("../helpers/index");
 
 var _renderChildren = _interopRequireDefault(require("../plugins/renderChildren"));
 
@@ -5367,7 +5505,6 @@ function () {
     _classCallCheck(this, Player);
 
     this.speed = 2;
-    this.children = [];
     this.controller = new _controller.KeyboardController();
   }
 
@@ -5383,27 +5520,8 @@ function () {
           _this.body.x = posX;
           _this.body.y = posY;
           _this.speed = speed;
-          _this.body.children = [];
           (0, _kontra.registerPlugin)(_kontra.Sprite, _renderChildren.default);
-          _this.collider = (0, _kontra.Sprite)({
-            ox: 0,
-            oy: 0.5,
-            ow: 0.8,
-            oh: 0.5,
-            anchor: {
-              x: 0.5,
-              y: 0
-            },
-            render: function render() {
-              // draw the rectangle sprite normally
-              this.draw(); // outline the sprite
-
-              this.context.fillStyle = "transparent";
-              this.context.strokeStyle = "yellow";
-              this.context.lineWidth = 1;
-              this.context.strokeRect(this.x, this.y, this.width, this.height);
-            }
-          });
+          _this.collider = new _index.Collider(0, 0.5, 1, 0.5);
 
           _this.body.addChild(_this.collider);
 
@@ -5418,8 +5536,7 @@ function () {
         var dirs = this.controller.update();
         this.body.dx = dirs.x * this.speed;
         this.body.dy = dirs.y * this.speed;
-        this.body.update(); // this.collider.update();
-
+        this.body.update();
         this.setAnimation();
       }
     }
@@ -5429,7 +5546,7 @@ function () {
       if (this.body) {
         this.body.render();
 
-        _log.Log.q(this.body.x);
+        _index.Log.q(this.body.x);
       }
     }
   }, {
@@ -5474,7 +5591,7 @@ function () {
 }();
 
 exports.Player = Player;
-},{"./assets":"js/assets.ts","./controller":"js/controller.ts","../helpers/log":"helpers/log.ts","../plugins/renderChildren":"plugins/renderChildren.ts","../kontra/kontra":"kontra/kontra.js"}],"js/game.ts":[function(require,module,exports) {
+},{"./assets":"js/assets.ts","./controller":"js/controller.ts","../helpers/index":"helpers/index.ts","../plugins/renderChildren":"plugins/renderChildren.ts","../kontra/kontra":"kontra/kontra.js"}],"js/game.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5492,6 +5609,8 @@ var _assets = require("./assets");
 
 var _player2 = require("./player");
 
+var _index = require("../helpers/index");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5507,11 +5626,10 @@ function () {
     _classCallCheck(this, Game);
 
     this.ready = false;
-    this.sortGroup = [];
     this.player = new _player2.Player();
     this.player2 = new _player2.Player();
-    this.sortGroup.push(this.player);
-    this.sortGroup.push(this.player2);
+
+    _index.DepthSort.add(this.player, this.player2);
   }
 
   _createClass(Game, [{
@@ -5536,12 +5654,10 @@ function () {
     key: "update",
     value: function update() {
       if (this.ready) {
-        if (this.tiles.layerCollidesWith("walls", this.player.body)) {// console.log(this.player.body);
-        }
-
         this.player.update();
-        this.player2.update();
-        this.player.body.collidesWith(this.player2.body);
+        this.player2.update(); // if (this.tiles.layerCollidesWith("walls", this.player.collider)) {
+        // console.log(this.player.body);
+        // }
       }
     }
   }, {
@@ -5549,7 +5665,7 @@ function () {
     value: function render() {
       if (this.ready) {
         // this.tiles.render();
-        depthRender(this.sortGroup);
+        _index.DepthSort.render();
       }
     }
   }]);
@@ -5558,16 +5674,7 @@ function () {
 }();
 
 exports.Game = Game;
-
-function depthRender(group) {
-  var sorted = group.sort(function (i1, i2) {
-    return i1.body.y - i2.body.y;
-  });
-  sorted.forEach(function (i) {
-    return i.render();
-  });
-}
-},{"../maps/tiles.png":"maps/tiles.png","../assets/images/player.png":"assets/images/player.png","../maps/map.json":"maps/map.json","./assets":"js/assets.ts","./player":"js/player.ts"}],"js/index.ts":[function(require,module,exports) {
+},{"../maps/tiles.png":"maps/tiles.png","../assets/images/player.png":"assets/images/player.png","../maps/map.json":"maps/map.json","./assets":"js/assets.ts","./player":"js/player.ts","../helpers/index":"helpers/index.ts"}],"js/index.ts":[function(require,module,exports) {
 "use strict";
 
 var _kontra = require("../kontra/kontra.js");
@@ -5627,7 +5734,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33395" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40043" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

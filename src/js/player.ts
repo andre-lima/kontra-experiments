@@ -1,15 +1,14 @@
 // import { Sprite } from "../../declarations/kontra";
 import { loadAnimatedPlayer } from "./assets";
 import { KeyboardController } from "./controller";
-import { Log } from "../helpers/log";
+import { Log, Collider } from "../helpers/index";
 import renderChildrenPlugin from "../plugins/renderChildren";
 import { registerPlugin, Sprite } from "../kontra/kontra";
 
 export class Player {
   protected speed = 2;
   public body: Sprite;
-  public collider: Sprite;
-  public children = [];
+  public collider: Collider;
   private initialWidth: number;
   private controller: KeyboardController;
 
@@ -26,28 +25,9 @@ export class Player {
         this.body.y = posY;
         this.speed = speed;
 
-        this.body.children = [];
-
         registerPlugin(Sprite, renderChildrenPlugin);
 
-        this.collider = Sprite({
-          ox: 0,
-          oy: 0.5,
-          ow: 0.8,
-          oh: 0.5,
-          anchor: {x:0.5, y:0},
-          render: function() {
-            // draw the rectangle sprite normally
-            this.draw();
-
-            // outline the sprite
-            this.context.fillStyle = "transparent";
-            this.context.strokeStyle = "yellow";
-            this.context.lineWidth = 1;
-            this.context.strokeRect(this.x, this.y, this.width, this.height);
-          }
-        });
-
+        this.collider = new Collider(0, 0.5, 1, 0.5)
         this.body.addChild(this.collider);
 
         resolve(this.body);
@@ -63,7 +43,6 @@ export class Player {
 
       this.body.update();
 
-      // this.collider.update();
       this.setAnimation();
     }
   }
