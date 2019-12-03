@@ -5316,8 +5316,10 @@ var renderChildrenPlugin = {
   afterUpdate: function afterUpdate(sprite, result, object) {
     if (sprite.children) {
       sprite.children.forEach(function (c) {
-        c.x = sprite.x;
-        c.y = sprite.y;
+        c.x = sprite.x + sprite.width * c.ox;
+        c.y = sprite.y + sprite.width * c.oy;
+        c.width = sprite.width * c.ow;
+        c.height = sprite.height * c.oh;
         c.update();
       });
     }
@@ -5384,11 +5386,23 @@ function () {
           _this.body.children = [];
           (0, _kontra.registerPlugin)(_kontra.Sprite, _renderChildren.default);
           _this.collider = (0, _kontra.Sprite)({
-            x: 0,
-            y: 0,
-            width: 5,
-            height: 5,
-            color: "red"
+            ox: 0,
+            oy: 0.5,
+            ow: 0.8,
+            oh: 0.5,
+            anchor: {
+              x: 0.5,
+              y: 0
+            },
+            render: function render() {
+              // draw the rectangle sprite normally
+              this.draw(); // outline the sprite
+
+              this.context.fillStyle = "transparent";
+              this.context.strokeStyle = "yellow";
+              this.context.lineWidth = 1;
+              this.context.strokeRect(this.x, this.y, this.width, this.height);
+            }
           });
 
           _this.body.addChild(_this.collider);
@@ -5493,8 +5507,11 @@ function () {
     _classCallCheck(this, Game);
 
     this.ready = false;
+    this.sortGroup = [];
     this.player = new _player2.Player();
     this.player2 = new _player2.Player();
+    this.sortGroup.push(this.player);
+    this.sortGroup.push(this.player2);
   }
 
   _createClass(Game, [{
@@ -5532,8 +5549,7 @@ function () {
     value: function render() {
       if (this.ready) {
         // this.tiles.render();
-        this.player.render();
-        this.player2.render();
+        depthRender(this.sortGroup);
       }
     }
   }]);
@@ -5542,6 +5558,15 @@ function () {
 }();
 
 exports.Game = Game;
+
+function depthRender(group) {
+  var sorted = group.sort(function (i1, i2) {
+    return i1.body.y - i2.body.y;
+  });
+  sorted.forEach(function (i) {
+    return i.render();
+  });
+}
 },{"../maps/tiles.png":"maps/tiles.png","../assets/images/player.png":"assets/images/player.png","../maps/map.json":"maps/map.json","./assets":"js/assets.ts","./player":"js/player.ts"}],"js/index.ts":[function(require,module,exports) {
 "use strict";
 
@@ -5602,7 +5627,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41269" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33395" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

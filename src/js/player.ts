@@ -26,16 +26,26 @@ export class Player {
         this.body.y = posY;
         this.speed = speed;
 
-        this.body.children = []
+        this.body.children = [];
 
         registerPlugin(Sprite, renderChildrenPlugin);
 
         this.collider = Sprite({
-          x: 0,
-          y: 0,
-          width: 5,
-          height: 5,
-          color: "red"
+          ox: 0,
+          oy: 0.5,
+          ow: 0.8,
+          oh: 0.5,
+          anchor: {x:0.5, y:0},
+          render: function() {
+            // draw the rectangle sprite normally
+            this.draw();
+
+            // outline the sprite
+            this.context.fillStyle = "transparent";
+            this.context.strokeStyle = "yellow";
+            this.context.lineWidth = 1;
+            this.context.strokeRect(this.x, this.y, this.width, this.height);
+          }
         });
 
         this.body.addChild(this.collider);
@@ -93,5 +103,4 @@ export class Player {
   unflip() {
     this.body.width = this.initialWidth;
   }
-
 }

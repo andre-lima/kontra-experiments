@@ -4,16 +4,20 @@ import playerImg from "../assets/images/player.png";
 import mapJson from "../maps/map.json";
 import { loadTiles } from "./assets";
 import { Player } from "./player";
+import { Log } from "../helpers/log";
 
 export class Game {
   private player: Player;
   private player2: Player;
   private tiles: TileEngine;
   private ready = false;
+  private sortGroup = [];
 
   constructor() {
     this.player = new Player();
     this.player2 = new Player();
+    this.sortGroup.push(this.player);
+    this.sortGroup.push(this.player2);
   }
 
   load() {
@@ -44,8 +48,12 @@ export class Game {
   render() {
     if (this.ready) {
       // this.tiles.render();
-      this.player.render();
-      this.player2.render();
+      depthRender(this.sortGroup)
     }
   }
+}
+
+function depthRender(group) {
+  const sorted = group.sort((i1, i2) => i1.body.y - i2.body.y );
+  sorted.forEach(i => i.render())
 }
