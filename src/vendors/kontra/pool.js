@@ -1,3 +1,5 @@
+import { Factory } from './utils.js'
+
 /**
  * A fast and memory efficient [object pool](https://gameprogrammingpatterns.com/object-pool.html) for sprite reuse. Perfect for particle systems or SHUMPs. The pool starts out with just one object, but will grow in size to accommodate as many objects as are needed.
  *
@@ -18,7 +20,7 @@ class Pool {
 
     // check for the correct structure of the objects added to pools so we know that the
     // rest of the pool code will work without errors
-    // @if DEBUG
+    // @ifdef DEBUG
     let obj;
     if (!create ||
         ( !( obj = create() ) ||
@@ -161,8 +163,4 @@ class Pool {
   }
 }
 
-export default function poolFactory(properties) {
-  return new Pool(properties);
-}
-poolFactory.prototype = Pool.prototype;
-poolFactory.class = Pool;
+export default Factory(Pool)

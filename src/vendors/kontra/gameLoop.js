@@ -1,6 +1,6 @@
-import { noop } from "./utils.js";
-import { emit } from "./events.js";
-import { getContext, getCanvas } from "./core.js";
+import { noop } from './utils.js'
+import { emit } from './events.js'
+import { getContext, getCanvas } from './core.js'
 
 /**
  * Clear the canvas.
@@ -53,24 +53,19 @@ function clear() {
  * @param {Number}   [properties.fps=60] - Desired frame rate.
  * @param {Boolean}  [properties.clearCanvas=true] - Clear the canvas every frame before the `render()` function is called.
  */
-export default function GameLoop({
-  fps = 60,
-  clearCanvas = true,
-  update,
-  render
-} = {}) {
+export default function GameLoop({fps = 60, clearCanvas = true, update, render} = {}) {
   // check for required functions
-  // @if DEBUG
-  if (!(update && render)) {
-    throw Error("You must provide update() and render() functions");
+  // @ifdef DEBUG
+  if ( !(update && render) ) {
+    throw Error('You must provide update() and render() functions');
   }
   // @endif
 
   // animation variables
   let accumulator = 0;
-  let delta = 1e3 / fps; // delta between performance.now timings (in ms)
+  let delta = 1E3 / fps;  // delta between performance.now timings (in ms)
   let step = 1 / fps;
-  let clearFn = clearCanvas ? clear : noop;
+  let clearFn = clearCanvas ? clear : noop
   let last, rAF, now, dt, loop;
 
   /**
@@ -85,11 +80,11 @@ export default function GameLoop({
 
     // prevent updating the game with a very large dt if the game were to lose focus
     // and then regain focus later
-    if (dt > 1e3) {
+    if (dt > 1E3) {
       return;
     }
 
-    emit("tick");
+    emit('tick');
     accumulator += dt;
 
     while (accumulator >= delta) {
@@ -164,7 +159,7 @@ export default function GameLoop({
     },
 
     // expose properties for testing
-    // @if DEBUG
+    // @ifdef DEBUG
     _frame: frame,
     set _last(value) {
       last = value;
@@ -173,4 +168,4 @@ export default function GameLoop({
   };
 
   return loop;
-}
+};

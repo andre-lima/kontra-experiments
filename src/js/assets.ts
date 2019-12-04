@@ -10,10 +10,6 @@ import {
   Sprite
 } from "../vendors/kontra/kontra.js";
 
-export function loadAssets() {}
-
-export function loadSprite() {}
-
 export function loadAnimatedPlayer(imageSrc) {
   return new Promise(resolve => {
     let image = new Image();
