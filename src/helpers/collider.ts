@@ -1,4 +1,4 @@
-import { Sprite } from "../kontra/kontra";
+import { Sprite } from "../vendors/kontra/kontra";
 
 export class Collider extends Sprite.class {
   public ox: number;

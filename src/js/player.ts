@@ -1,9 +1,9 @@
 // import { Sprite } from "../../declarations/kontra";
 import { loadAnimatedPlayer } from "./assets";
 import { KeyboardController } from "./controller";
-import { Log, Collider } from "../helpers/index";
+import { Log, Collider, Line } from "../helpers/index";
 import renderChildrenPlugin from "../plugins/renderChildren";
-import { registerPlugin, Sprite } from "../kontra/kontra";
+import { registerPlugin, Sprite } from "../vendors/kontra/kontra";
 
 export class Player {
   protected speed = 2;
@@ -23,11 +23,13 @@ export class Player {
         this.initialWidth = this.body.width;
         this.body.x = posX;
         this.body.y = posY;
+        this.body.anchor.x = 0.5;
+        this.body.anchor.y = 0.5;
         this.speed = speed;
 
         registerPlugin(Sprite, renderChildrenPlugin);
 
-        this.collider = new Collider(0, 0.5, 1, 0.5)
+        this.collider = new Collider(0, 0.5, 1, 0.5);
         this.body.addChild(this.collider);
 
         resolve(this.body);

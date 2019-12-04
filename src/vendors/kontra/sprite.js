@@ -1,6 +1,5 @@
 import { getContext } from "./core.js";
 import Vector from "./vector.js";
-import { Log } from "../helpers/log.ts";
 
 /**
  * A versatile way to update and draw your game objects. It can handle simple rectangles, images, and sprite sheet animations. It can be used for your main player object as well as tiny particles in a particle engine.

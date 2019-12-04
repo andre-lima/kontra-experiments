@@ -8,7 +8,7 @@ import {
   TileEngine,
   dataAssets,
   Sprite
-} from "../kontra/kontra.js";
+} from "../vendors/kontra/kontra.js";
 
 export function loadAssets() {}
 

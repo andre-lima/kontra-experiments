@@ -5,7 +5,7 @@ import {
   GameLoop,
   Sprite,
   SpriteSheet
-} from "../kontra/kontra.js";
+} from "../vendors/kontra/kontra.js";
 import "../plugins/extendSprite";
 import { $, $$, configCanvas } from "../helpers/index";
 import { Game } from "./game";

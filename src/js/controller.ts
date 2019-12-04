@@ -1,4 +1,4 @@
-import { initKeys, keyPressed } from "../kontra/kontra.js";
+import { initKeys, keyPressed } from "../vendors/kontra/kontra.js";
 import { normalize } from "../helpers/index";
 
 export class KeyboardController {

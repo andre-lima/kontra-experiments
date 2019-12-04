@@ -1,8 +1,19 @@
 import { DepthSort } from "./depth-sort";
 import { Log } from "./log";
 import { Collider } from "./collider";
+import { Line } from "./line";
 
-export { $, $$, configCanvas, Log, DepthSort, Collider, normalize, distance };
+export {
+  $,
+  $$,
+  configCanvas,
+  Log,
+  DepthSort,
+  Collider,
+  Line,
+  normalize,
+  distance
+};
 
 // OTHER HELPER FUNCTIONS BELOW
 
