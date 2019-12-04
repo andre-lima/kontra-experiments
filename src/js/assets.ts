@@ -26,19 +26,19 @@ export function loadAnimatedPlayer(imageSrc) {
             frameRate: 0
           },
           up: {
-            frames: "6..8", // frames 0 through 9
+            frames: "6..8",
             frameRate: 6
           },
           down: {
-            frames: "0..2", // frames 0 through 9
+            frames: "0..2",
             frameRate: 6
           },
           left: {
-            frames: "3..5", // frames 0 through 9
+            frames: "3..5",
             frameRate: 6
           },
           right: {
-            frames: "3..5", // frames 0 through 9
+            frames: "3..5",
             frameRate: 6
           }
         }
