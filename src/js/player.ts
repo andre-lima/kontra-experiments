@@ -27,8 +27,6 @@ export class Player {
         this.body.anchor.y = 0.5;
         this.speed = speed;
 
-        // this.collider = new Collider(0, 0.5, 1, 0.5);
-        // this.body.addChild(this.collider);
         this.body.collider = new Collider(0, 0.5, 1, 0.5);
 
         resolve(this.body);

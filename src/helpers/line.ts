@@ -1,5 +1,3 @@
-
-
 // Usage: On render method...
 // Line.lineTo(this.player.body, this.player2.body);
 
