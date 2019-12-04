@@ -6,7 +6,6 @@ import {
   Sprite,
   SpriteSheet
 } from "../vendors/kontra/kontra.js";
-import "../plugins/extendSprite";
 import { $, $$, configCanvas } from "../helpers/index";
 import { Game } from "./game";
 import { Log } from "../helpers/log";

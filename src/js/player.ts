@@ -2,8 +2,8 @@
 import { loadAnimatedPlayer } from "./assets";
 import { KeyboardController } from "./controller";
 import { Log, Collider, Line } from "../helpers/index";
-import renderChildrenPlugin from "../plugins/renderChildren";
-import { registerPlugin, Sprite } from "../vendors/kontra/kontra";
+
+
 
 export class Player {
   protected speed = 2;
@@ -27,10 +27,9 @@ export class Player {
         this.body.anchor.y = 0.5;
         this.speed = speed;
 
-        registerPlugin(Sprite, renderChildrenPlugin);
-
-        this.collider = new Collider(0, 0.5, 1, 0.5);
-        this.body.addChild(this.collider);
+        // this.collider = new Collider(0, 0.5, 1, 0.5);
+        // this.body.addChild(this.collider);
+        this.body.collider = new Collider(0, 0.5, 1, 0.5);
 
         resolve(this.body);
       });
@@ -44,6 +43,7 @@ export class Player {
       this.body.dy = dirs.y * this.speed;
 
       this.body.update();
+      this.body.collider.update(this.body);
 
       this.setAnimation();
     }
@@ -52,6 +52,7 @@ export class Player {
   render() {
     if (this.body) {
       this.body.render();
+      this.body.collider.render();
       Log.q(this.body.x);
     }
   }

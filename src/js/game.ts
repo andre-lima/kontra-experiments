@@ -1,4 +1,3 @@
-import { Sprite, TileEngine } from "../../declarations/kontra";
 import tilesImage from "../maps/tiles.png";
 import playerImg from "../assets/images/player.png";
 import mapJson from "../maps/map.json";

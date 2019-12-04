@@ -12,6 +12,14 @@ export class Collider extends Sprite.class {
     this.oy = oy;
     this.ow = ow;
     this.oh = oh;
+    this.anchor = { x: 0.5, y: 0.5 };
+  }
+
+  update(parent) {
+    this.x = parent.x - parent.anchor.x * parent.width + parent.width * this.ox;
+    this.y = parent.y - parent.anchor.y * parent.height + parent.height * this.oy;
+    this.width = parent.width * this.ow;
+    this.height = parent.height * this.oh;
   }
 
   render() {
