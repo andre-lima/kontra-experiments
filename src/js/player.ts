@@ -3,8 +3,6 @@ import { loadAnimatedPlayer } from "./assets";
 import { KeyboardController } from "./controller";
 import { Log, Collider, Line } from "../helpers/index";
 
-
-
 export class Player {
   protected speed = 2;
   public body: Sprite;
@@ -51,7 +49,6 @@ export class Player {
     if (this.body) {
       this.body.render();
       this.body.collider.render();
-      Log.q(this.body.x);
     }
   }
 

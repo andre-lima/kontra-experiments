@@ -11,11 +11,14 @@ export class Game {
   private player2: Player;
   private tiles: TileEngine;
   private ready = false;
+  private collisionMap;
+  private line: Line;
 
   constructor() {
     this.player = new Player();
     this.player2 = new Player();
     DepthSort.add(this.player, this.player2);
+    this.line = new Line();
   }
 
   load() {
@@ -23,13 +26,13 @@ export class Game {
 
     loadTiles(mapJson, tilesImage).then((tiles: TileEngine) => {
       this.tiles = tiles;
-      const collisionMap = collisionMapping(this.tiles, 'walls');
+      this.collisionMap = collisionMapping(this.tiles, 'walls');
 
       this.player.load(playerImg, 16 * 5, 16 * 5, 2).then(body => {
         this.ready = true;
       });
 
-      this.player2.load(playerImg, 16 * 18, 16 * 10, -1).then(body => {
+      this.player2.load(playerImg, 16 * 10, 16 * 10, -0).then(body => {
         this.ready = true;
       });
     });
@@ -43,13 +46,15 @@ export class Game {
       if (this.tiles.layerCollidesWith("walls", this.player.body)) {
         console.log("colliding");
       }
+      this.line.lineCollidesWith(this.collisionMap, 16, 16);
+      Log.q(this.player.body.x + " " + this.player2.body.x, 'players');
+      this.line.lineTo(this.player.body, this.player2.body);
     }
   }
 
   render() {
     if (this.ready) {
       this.tiles.render();
-      Line.lineTo(this.player.body, this.player2.body);
       DepthSort.render();
     }
   }
