@@ -4,6 +4,7 @@ import mapJson from "../maps/map.json";
 import { loadTiles } from "./assets";
 import { Player } from "./player";
 import { Log, DepthSort, Line } from "../helpers/index";
+import { collisionMapping } from "../helpers/collision-map";
 
 export class Game {
   private player: Player;
@@ -22,6 +23,7 @@ export class Game {
 
     loadTiles(mapJson, tilesImage).then((tiles: TileEngine) => {
       this.tiles = tiles;
+      const collisionMap = collisionMapping(this.tiles, 'walls');
 
       this.player.load(playerImg, 16 * 5, 16 * 5, 2).then(body => {
         this.ready = true;
