@@ -4,7 +4,8 @@ import mapJson from "../maps/map.json";
 import { loadTiles } from "./assets";
 import { Player } from "./player";
 import { Log, DepthSort, Line } from "../helpers/index";
-import { collisionMapping } from "../helpers/collision-map";
+import { tilesCollisionMapping, spriteCollisionMapping } from "../helpers/collision-map";
+import { Sprite } from "../vendors/kontra/kontra.js";
 
 export class Game {
   private player: Player;
@@ -14,11 +15,24 @@ export class Game {
   private collisionMap;
   private line: Line;
 
+  private testSprite;
+  private tsmap;
+
   constructor() {
     this.player = new Player();
     this.player2 = new Player();
     DepthSort.add(this.player, this.player2);
     this.line = new Line();
+
+    this.testSprite = Sprite({
+      x: 100,
+      y: 120,
+      width: 40,
+      height: 20,
+      color: "red"
+    });
+    this.tsmap = spriteCollisionMapping(this.testSprite);
+    console.log(this.tsmap);
   }
 
   load() {
@@ -26,7 +40,7 @@ export class Game {
 
     loadTiles(mapJson, tilesImage).then((tiles: TileEngine) => {
       this.tiles = tiles;
-      this.collisionMap = collisionMapping(this.tiles, 'walls');
+      this.collisionMap = tilesCollisionMapping(this.tiles, "walls");
 
       this.player.load(playerImg, 16 * 5, 16 * 5, 2).then(body => {
         this.ready = true;
@@ -42,20 +56,23 @@ export class Game {
     if (this.ready) {
       this.player.update();
       this.player2.update();
+      this.testSprite.render();
 
       if (this.tiles.layerCollidesWith("walls", this.player.body)) {
         console.log("colliding");
       }
-      this.line.lineCollidesWith(this.collisionMap, 16, 16);
-      Log.q(this.player.body.x + " " + this.player2.body.x, 'players');
+      // this.line.lineCollidesWith(this.collisionMap, 16, 16);
+      this.line.lineCollidesWith(this.tsmap, 40, 20);
+      Log.q(this.player.body.x + " " + this.player2.body.x, "players");
       this.line.lineTo(this.player.body, this.player2.body);
     }
   }
 
   render() {
     if (this.ready) {
-      this.tiles.render();
+      // this.tiles.render();
       DepthSort.render();
+      this.testSprite.render();
     }
   }
 }

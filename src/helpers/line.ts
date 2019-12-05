@@ -31,8 +31,8 @@ export class Line {
 
     for (let t = 0; t <= 1; t += 0.1) {
       tilesKey = Math.floor(this.findX(t) / tileW)  + "x" + Math.floor(this.findY(t) / tileH);
+
       if (tilesKey in tiles) {
-        // console.log(true, tilesKey);
         collided.push(tilesKey)
         Log.q(collided.join('|'), 'tilesKey')
       }
