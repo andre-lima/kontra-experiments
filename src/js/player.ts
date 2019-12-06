@@ -1,7 +1,7 @@
 // import { Sprite } from "../../declarations/kontra";
 import { loadAnimatedPlayer } from "./assets";
 import { KeyboardController } from "./controller";
-import { Log, Collider, Line } from "../helpers/index";
+import { Log, Collider } from "../helpers/index";
 
 export class Player {
   protected speed = 2;

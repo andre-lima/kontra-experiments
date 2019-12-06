@@ -1,5 +1,6 @@
 import tilesImage from "../maps/tiles.png";
 import playerImg from "../assets/images/player.png";
+import coinImg from "../assets/images/coin.png";
 import mapJson from "../maps/map.json";
 import { loadTiles } from "./assets";
 import { Player } from "./player";
@@ -10,27 +11,29 @@ import { Sprite } from "../vendors/kontra/kontra.js";
 export class Game {
   private player: Player;
   private player2: Player;
+  private coin: Sprite;
   private tiles: TileEngine;
   private ready = false;
   private collisionMap;
   private ray: Ray;
 
-  private testSprite;
-  private tsmap;
-
   constructor() {
     this.player = new Player();
     this.player2 = new Player();
-    DepthSort.add(this.player, this.player2);
     this.ray = new Ray();
 
-    this.testSprite = Sprite({
+    let coin  = new Image();
+    coin.src = coinImg;
+    
+    this.coin = Sprite({
       x: 100,
       y: 120,
-      width: 40,
-      height: 20,
-      color: "#bada55"
+      width: 8,
+      height: 8,
+      image: coin
     });
+
+    DepthSort.add(this.player, this.player2);
   }
 
   load() {
@@ -54,7 +57,7 @@ export class Game {
     if (this.ready) {
       this.player.update();
       this.player2.update();
-      this.testSprite.render();
+      this.coin.update();
 
       this.ray.cast(this.player.body, this.player2.body);
 
@@ -63,19 +66,19 @@ export class Game {
       }
 
       this.ray.collidesWithTiles(this.collisionMap);
-      this.ray.collidesWithSprite(this.testSprite);
+      this.ray.collidesWithSprite(this.coin);
       Log.q(this.player.body.x + " " + this.player2.body.x, "players");
     }
   }
 
   render() {
     if (this.ready) {
-      // this.tiles.render();
+      this.tiles.render();
       DepthSort.render();
+      this.coin.render();
 
-      this.testSprite.render();
-      if (this.ray.collidesWithSprite(this.testSprite)) {
-        this.ray.drawDebugSprites(this.testSprite);
+      if (this.ray.collidesWithSprite(this.coin)) {
+        this.ray.drawDebugSprites(this.coin);
       }
 
       this.ray.render();
