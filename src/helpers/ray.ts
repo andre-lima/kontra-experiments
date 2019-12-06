@@ -47,18 +47,30 @@ export class Ray {
     ctx.restore();
   }
 
-  collidesWithTiles(tiles, tileW, tileH) {
-    let collided = {};
-    let x = 0;
-    let y = 0;
+  collidesWithTiles(colMap) {
+    let collided = [];
+    let index = 0;
 
     for (let t = 0; t <= 1; t += this.lineStep) {
-      x = Math.floor(this.findX(t) / tileW);
-      y = Math.floor(this.findY(t) / tileH);
+      const x = Math.floor(this.findX(t) / colMap.width);
+      const y = Math.floor(this.findY(t) / colMap.height);
 
-      if (tiles[x] && tiles[x][y]) {
-        collided[x] = collided[x] || {};
-        collided[x][y] = true;
+      index = x + y * colMap.widthInTiles;
+
+      if (colMap.tilesData[index]) {
+        // Advance a bit faster to avoid checking the same tile many times.
+        // Need to better tweak this value to be even more efficient.
+        t += this.lineStep * 2;
+
+        // Adds collision tile point while avoiding repeated entries in array.
+        const lastItemAdded = collided[collided.length - 1];
+        if (
+          !lastItemAdded ||
+          x * colMap.width !== lastItemAdded.x ||
+          y * colMap.height !== lastItemAdded.y
+        ) {
+          collided.push({ x: x * colMap.width, y: y * colMap.height });
+        }
       }
     }
 
@@ -66,7 +78,7 @@ export class Ray {
 
     this.tilesCollided = collided;
 
-    return Object.keys(collided).length > 0;
+    return collided.length > 0;
   }
 
   collidesWithSprite(sprite) {
@@ -90,19 +102,21 @@ export class Ray {
   }
 
   drawDebugTiles(w, h) {
-    Object.keys(this.tilesCollided).forEach(x => {
-      Object.keys(this.tilesCollided[x]).forEach(y => {
-        this.ctx.beginPath();
-        this.ctx.fillStyle = "rgba(200,22,22,0.5)";
-        this.ctx.fillRect(+x * w, +y * h, w, h);
-      });
+    this.tilesCollided.forEach(pos => {
+      this.ctx.save();
+      this.ctx.beginPath();
+      this.ctx.fillStyle = "rgba(200,22,22,0.5)";
+      this.ctx.fillRect(+pos.x, +pos.y, w, h);
+      this.ctx.restore();
     });
   }
 
   drawDebugSprites(sprite) {
+    this.ctx.save();
     this.ctx.beginPath();
     this.ctx.fillStyle = "rgba(200,22,22,0.5)";
     this.ctx.fillRect(sprite.x, sprite.y, sprite.width, sprite.height);
+    this.ctx.restore();
   }
 
   rayLength(x0, y0, x1, y1) {

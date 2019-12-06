@@ -61,7 +61,8 @@ export class Game {
       if (this.tiles.layerCollidesWith("walls", this.player.body)) {
         // console.log("colliding");
       }
-      this.ray.collidesWithTiles(this.collisionMap, 16, 16);
+
+      this.ray.collidesWithTiles(this.collisionMap);
       this.ray.collidesWithSprite(this.testSprite);
       Log.q(this.player.body.x + " " + this.player2.body.x, "players");
     }
@@ -69,7 +70,7 @@ export class Game {
 
   render() {
     if (this.ready) {
-      this.tiles.render();
+      // this.tiles.render();
       DepthSort.render();
 
       this.testSprite.render();

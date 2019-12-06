@@ -1,18 +1,13 @@
+
 export const tilesCollisionMapping = function(tiles, layer) {
-  let collisionMap = {};
+  const width = tiles.tilewidth;
+  const height = tiles.tileheight;
+  
   const widthInTiles = tiles.layerMap[layer].width;
-  const tilesLayer = tiles.layerMap[layer];
-  const tilesData = tilesLayer.data;
+  const tilesData = tiles.layerMap[layer].data;
 
-  tilesData.forEach((tile, index) => {
-    const x = index % widthInTiles;
-    const y = Math.floor(index / widthInTiles);
+  return {
+    widthInTiles, tilesData, width, height
+  }
 
-    if (tile) {
-      collisionMap[x] = collisionMap[x] || {};
-      collisionMap[x][y] = tile;
-    }
-  });
-
-  return collisionMap;
 };
