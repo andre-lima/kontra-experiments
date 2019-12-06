@@ -9,7 +9,8 @@ export const tilesCollisionMapping = function(tiles, layer) {
     const y = Math.floor(index / widthInTiles);
 
     if (tile) {
-      collisionMap[x + "x" + y] = tile;
+      collisionMap[x] = collisionMap[x] || {};
+      collisionMap[x][y] = tile;
     }
   });
 

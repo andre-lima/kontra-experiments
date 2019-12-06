@@ -29,9 +29,8 @@ export class Game {
       y: 120,
       width: 40,
       height: 20,
-      color: "red"
+      color: "#bada55"
     });
-    console.log(this.tsmap);
   }
 
   load() {
@@ -57,6 +56,8 @@ export class Game {
       this.player2.update();
       this.testSprite.render();
 
+      this.ray.cast(this.player.body, this.player2.body);
+
       if (this.tiles.layerCollidesWith("walls", this.player.body)) {
         // console.log("colliding");
       }
@@ -70,8 +71,14 @@ export class Game {
     if (this.ready) {
       this.tiles.render();
       DepthSort.render();
+
       this.testSprite.render();
-      this.ray.cast(this.player.body, this.player2.body);
+      if (this.ray.collidesWithSprite(this.testSprite)) {
+        this.ray.drawDebugSprites(this.testSprite);
+      }
+
+      this.ray.render();
+      this.ray.drawDebugTiles(16, 16);
     }
   }
 }

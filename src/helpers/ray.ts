@@ -1,9 +1,15 @@
 import { Log } from "./log";
 
-// Usage: On render method...
-// Line.lineTo(this.player.body, this.player2.body);
-
 export class Ray {
+  private p1;
+  private p2;
+  private ctx;
+  private lineStep;
+  private lineLength;
+  private tilesCollided;
+
+  update() {}
+
   findX = t => {
     return null;
   };
@@ -12,51 +18,62 @@ export class Ray {
   };
 
   cast(p1, p2) {
+    this.p1 = p1;
+    this.p2 = p2;
+    this.ctx = this.p1.context;
+
     // Create parametric functions to get X and Y.
     [this.findX, this.findY] = this.lineFunctions(p1.x, p1.y, p2.x, p2.y);
 
-    this.drawLine(p1.x, p1.y, p2.x, p2.y, p1.context);
+    // Reduce lineStep when ray is big in length. If not, we could skip lots of tiles like this.
+    this.lineLength = this.rayLength(p1.x, p1.y, p2.x, p2.y);
+    this.lineStep = 5 / this.lineLength;
+  }
+
+  render() {
+    this.drawLine(this.p1.x, this.p1.y, this.p2.x, this.p2.y, this.p1.context);
   }
 
   drawLine(x0, y0, x1, y1, ctx) {
     ctx.save();
-    Log.q(5 / this.rayLength(x0, y0, x1, y1), "miopia");
     ctx.beginPath();
+
     ctx.moveTo(x0, y0);
     ctx.lineTo(x1, y1);
     ctx.strokeStyle = "yellow";
     ctx.lineWidth = 1;
-
-    ctx.translate(0, 0);
 
     ctx.stroke();
     ctx.restore();
   }
 
   collidesWithTiles(tiles, tileW, tileH) {
-    let tilesKey = "0x0";
-    let collided = [];
+    let collided = {};
+    let x = 0;
+    let y = 0;
 
-    for (let t = 0; t <= 1; t += 0.1) {
-      tilesKey =
-        Math.floor(this.findX(t) / tileW) +
-        "x" +
-        Math.floor(this.findY(t) / tileH);
+    for (let t = 0; t <= 1; t += this.lineStep) {
+      x = Math.floor(this.findX(t) / tileW);
+      y = Math.floor(this.findY(t) / tileH);
 
-      if (tilesKey in tiles) {
-        collided.push(tilesKey);
-        Log.q(collided.join("|"), "tilesKey");
+      if (tiles[x] && tiles[x][y]) {
+        collided[x] = collided[x] || {};
+        collided[x][y] = true;
       }
     }
 
-    return collided.length > 0;
+    Log.q(JSON.stringify(collided), "tiles_collided");
+
+    this.tilesCollided = collided;
+
+    return Object.keys(collided).length > 0;
   }
 
   collidesWithSprite(sprite) {
     let x = 0;
     let y = 0;
 
-    for (let t = 0; t <= 1; t += 0.1) {
+    for (let t = 0; t <= 1; t += this.lineStep) {
       x = this.findX(t);
       y = this.findY(t);
 
@@ -66,14 +83,27 @@ export class Ray {
         y >= sprite.y &&
         y <= sprite.y + sprite.height
       ) {
-        console.log("object");
         return true;
       }
     }
     return false;
   }
 
-  drawDebugTiles() {}
+  drawDebugTiles(w, h) {
+    Object.keys(this.tilesCollided).forEach(x => {
+      Object.keys(this.tilesCollided[x]).forEach(y => {
+        this.ctx.beginPath();
+        this.ctx.fillStyle = "rgba(200,22,22,0.5)";
+        this.ctx.fillRect(+x * w, +y * h, w, h);
+      });
+    });
+  }
+
+  drawDebugSprites(sprite) {
+    this.ctx.beginPath();
+    this.ctx.fillStyle = "rgba(200,22,22,0.5)";
+    this.ctx.fillRect(sprite.x, sprite.y, sprite.width, sprite.height);
+  }
 
   rayLength(x0, y0, x1, y1) {
     return Math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2);
