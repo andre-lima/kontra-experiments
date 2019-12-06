@@ -3,8 +3,8 @@ import playerImg from "../assets/images/player.png";
 import mapJson from "../maps/map.json";
 import { loadTiles } from "./assets";
 import { Player } from "./player";
-import { Log, DepthSort, Line } from "../helpers/index";
-import { tilesCollisionMapping, spriteCollisionMapping } from "../helpers/collision-map";
+import { Log, DepthSort, Ray } from "../helpers/index";
+import { tilesCollisionMapping } from "../helpers/collision-map";
 import { Sprite } from "../vendors/kontra/kontra.js";
 
 export class Game {
@@ -13,7 +13,7 @@ export class Game {
   private tiles: TileEngine;
   private ready = false;
   private collisionMap;
-  private line: Line;
+  private ray: Ray;
 
   private testSprite;
   private tsmap;
@@ -22,7 +22,7 @@ export class Game {
     this.player = new Player();
     this.player2 = new Player();
     DepthSort.add(this.player, this.player2);
-    this.line = new Line();
+    this.ray = new Ray();
 
     this.testSprite = Sprite({
       x: 100,
@@ -31,7 +31,6 @@ export class Game {
       height: 20,
       color: "red"
     });
-    this.tsmap = spriteCollisionMapping(this.testSprite);
     console.log(this.tsmap);
   }
 
@@ -59,20 +58,20 @@ export class Game {
       this.testSprite.render();
 
       if (this.tiles.layerCollidesWith("walls", this.player.body)) {
-        console.log("colliding");
+        // console.log("colliding");
       }
-      // this.line.lineCollidesWith(this.collisionMap, 16, 16);
-      this.line.lineCollidesWith(this.tsmap, 40, 20);
+      this.ray.collidesWithTiles(this.collisionMap, 16, 16);
+      this.ray.collidesWithSprite(this.testSprite);
       Log.q(this.player.body.x + " " + this.player2.body.x, "players");
-      this.line.lineTo(this.player.body, this.player2.body);
     }
   }
 
   render() {
     if (this.ready) {
-      // this.tiles.render();
+      this.tiles.render();
       DepthSort.render();
       this.testSprite.render();
+      this.ray.cast(this.player.body, this.player2.body);
     }
   }
 }

@@ -15,12 +15,3 @@ export const tilesCollisionMapping = function(tiles, layer) {
 
   return collisionMap;
 };
-
-export const spriteCollisionMapping = function(sprite) {
-  let collisionMap = {};
-  collisionMap[
-    Math.floor(sprite.x / sprite.width) + "x" + Math.floor(sprite.y / sprite.height)
-  ] = 1;
-
-  return collisionMap;
-};

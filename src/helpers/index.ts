@@ -1,7 +1,7 @@
 import { DepthSort } from "./depth-sort";
 import { Log } from "./log";
 import { Collider } from "./collider";
-import { Line } from "./line";
+import { Ray } from "./ray";
 
 export {
   $,
@@ -10,7 +10,7 @@ export {
   Log,
   DepthSort,
   Collider,
-  Line,
+  Ray,
   normalize,
   distance
 };
