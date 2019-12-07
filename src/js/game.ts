@@ -44,6 +44,7 @@ export class Game {
     this.coins.addChild(this.coin);
 
     DepthSort.add(this.coins);
+    DepthSort.add(this.player, this.player2);
 
     loadTiles(mapJson, tilesImage).then((tiles: TileEngine) => {
       this.tiles = tiles;
@@ -51,12 +52,10 @@ export class Game {
 
       this.player.load(playerImg, 16 * 5, 16 * 5, 2).then(body => {
         this.ready = true;
-        DepthSort.add(body);
       });
 
       this.player2.load(playerImg, 16 * 10, 16 * 10, -0).then(body => {
         this.ready = true;
-        DepthSort.add(body);
       });
     });
   }
@@ -69,8 +68,8 @@ export class Game {
 
       this.ray.cast(this.player.body, this.player2.body);
 
-      if (this.tiles.layerCollidesWith("walls", this.player.body)) {
-        // console.log("colliding");
+      if (this.tiles.layerCollidesWith("walls", this.player.collider)) {
+        console.log("colliding");
       }
 
       this.ray.collidesWithTiles(this.collisionMap);
