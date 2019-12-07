@@ -2,11 +2,13 @@
 import { loadAnimatedPlayer } from "./assets";
 import { KeyboardController } from "./controller";
 import { Log, Collider } from "../helpers/index";
+import { DirectionalCollider } from "../helpers/directional-collider";
 
 export class Player {
   protected speed = 2;
   public body: Sprite;
-  public collider: Collider;
+  public restrictions;
+  public collider;
   private initialWidth: number;
   private controller: KeyboardController;
 
@@ -14,7 +16,7 @@ export class Player {
     this.controller = new KeyboardController();
   }
 
-  load(playerImg, posX, posY, speed): Promise<Sprite> {
+  load(playerImg, posX, posY, speed, tiles): Promise<Sprite> {
     return new Promise(resolve => {
       loadAnimatedPlayer(playerImg).then((loadedPlayer: Sprite) => {
         this.body = loadedPlayer;
@@ -25,9 +27,12 @@ export class Player {
         this.body.anchor.y = 0.5;
         this.speed = speed;
 
-        this.collider = new Collider(0, 0.5, 1, 0.5);
+        this.collider = new Collider(0.15, 0.5, 0.7, 0.5);
         this.body.collider = this.collider;
         // this.body.addChild(this.collider);
+
+        this.restrictions = new DirectionalCollider(this.body, tiles);
+        this.controller.addRestrictions(this.restrictions);
 
         resolve(this.body);
       });
@@ -42,6 +47,7 @@ export class Player {
 
       this.body.update();
       this.body.collider.update(this.body);
+      this.restrictions.update();
 
       this.setAnimation();
     }

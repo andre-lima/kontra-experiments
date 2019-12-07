@@ -50,13 +50,15 @@ export class Game {
       this.tiles = tiles;
       this.collisionMap = tilesCollisionMapping(this.tiles, "walls");
 
-      this.player.load(playerImg, 16 * 5, 16 * 5, 2).then(body => {
+      this.player.load(playerImg, 16 * 5, 16 * 5, 2, this.tiles).then(body => {
         this.ready = true;
       });
 
-      this.player2.load(playerImg, 16 * 10, 16 * 10, -0).then(body => {
-        this.ready = true;
-      });
+      this.player2
+        .load(playerImg, 16 * 10, 16 * 10, 1, this.tiles)
+        .then(body => {
+          this.ready = true;
+        });
     });
   }
 
@@ -69,7 +71,7 @@ export class Game {
       this.ray.cast(this.player.body, this.player2.body);
 
       if (this.tiles.layerCollidesWith("walls", this.player.collider)) {
-        console.log("colliding");
+        // console.log("colliding");
       }
 
       this.ray.collidesWithTiles(this.collisionMap);

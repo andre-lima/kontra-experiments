@@ -16,9 +16,9 @@ export class Collider extends Sprite.class {
   }
 
   update(parent) {
-    this.x = parent.x - parent.anchor.x * parent.width + parent.width * this.ox;
-    this.y =
-      parent.y - parent.anchor.y * parent.height + parent.height * this.oy;
+    this.anchor = parent.anchor;
+    this.x = parent.x;
+    this.y = parent.y;
     this.width = parent.width * this.ow;
     this.height = parent.height * this.oh;
   }
@@ -28,9 +28,14 @@ export class Collider extends Sprite.class {
     this.draw();
 
     // outline the sprite
-    this.context.fillStyle = "transparent";
+    this.context.fillStyle = "rgba(222,22,222,0.6)";
     this.context.strokeStyle = "yellow";
     this.context.lineWidth = 1;
-    this.context.strokeRect(this.x, this.y, this.width, this.height);
+    this.context.fillRect(
+      this.x - this.anchor.x * this.width,
+      this.y,
+      this.width,
+      this.height
+    );
   }
 }
