@@ -16,49 +16,72 @@ export class DirectionalCollider extends Sprite.class {
   }
 
   update(tiles) {
+    const size = 2;
+
     // check up
     this.up = this.tiles.layerCollidesWith("walls", {
       width: this.parent.width,
-      height: 1,
+      height: size,
       x: this.parent.x - this.parent.anchor.x * this.parent.width,
-      y: this.parent.y - this.parent.anchor.y * this.parent.height - 1
+      y: this.parent.y - this.parent.anchor.y * this.parent.height - size
     });
 
     // check left
     this.left = this.tiles.layerCollidesWith("walls", {
-      width: 1,
+      width: size,
       height: this.parent.height,
-      x: this.parent.x - this.parent.anchor.x * this.parent.width - 1,
+      x: this.parent.x - this.parent.anchor.x * this.parent.width - size,
       y: this.parent.y - this.parent.anchor.y * this.parent.height
     });
 
     // check down
     this.down = this.tiles.layerCollidesWith("walls", {
       width: this.parent.width,
-      height: 1,
+      height: size,
       x: this.parent.x - this.parent.anchor.x * this.parent.width,
-      y: this.parent.y + this.parent.anchor.y * this.parent.height + 1
+      y: this.parent.y + this.parent.anchor.y * this.parent.height + size
     });
 
     // check right
     this.right = this.tiles.layerCollidesWith("walls", {
-      width: 1,
+      width: size,
       height: this.parent.height,
-      x: this.parent.x + this.parent.anchor.x * this.parent.width + 1,
+      x: this.parent.x + this.parent.anchor.x * this.parent.width + size,
       y: this.parent.y - this.parent.anchor.y * this.parent.height
     });
 
-    // Avoid blocking player if collider entered 1 pixel into restriction, making
-    // both up and down (or left and right) be colliding at the same time.
-    if (this.up && this.down) {
-      // this.up = this.down = false;
-    }
+    // const uplft = this.tiles.layerCollidesWith("walls", {
+    //   width: size,
+    //   height: size,
+    //   x: this.parent.x - this.parent.anchor.x * this.parent.width - size,
+    //   y: this.parent.y - this.parent.anchor.y * this.parent.height - size
+    // });
 
-    if (this.left && this.right) {
-      // this.left = this.right = false;
-    }
+    // const uprgt = this.tiles.layerCollidesWith("walls", {
+    //   width: size,
+    //   height: size,
+    //   x: this.parent.x + this.parent.anchor.x * this.parent.width,
+    //   y: this.parent.y - this.parent.anchor.y * this.parent.height - size
+    // });
 
-    // console.log(this.up, this.left, this.down, this.right);
+    // const dnlft = this.tiles.layerCollidesWith("walls", {
+    //   width: size,
+    //   height: size,
+    //   x: this.parent.x - this.parent.anchor.x * this.parent.width - size,
+    //   y: this.parent.y + this.parent.anchor.y * this.parent.height
+    // });
+
+    // const dnrgt = this.tiles.layerCollidesWith("walls", {
+    //   width: size,
+    //   height: size,
+    //   x: this.parent.x + this.parent.anchor.x * this.parent.width,
+    //   y: this.parent.y + this.parent.anchor.y * this.parent.height
+    // });
+
+    // this.up = (uplft || uprgt) && this.up;
+    // this.left = (uplft || dnlft) && this.left;
+    // this.down = (dnlft || dnrgt) && this.down;
+    // this.right = (uprgt || dnrgt) && this.right;
   }
 
   blockedUp() {
