@@ -1,19 +1,23 @@
 // import { Sprite } from "../../declarations/kontra";
 import { loadAnimatedPlayer } from "./assets";
-import { KeyboardController } from "./controller";
+import { AiController } from "./ai";
 import { Log, Collider } from "../helpers/index";
 import { DirectionalCollider } from "../helpers/directional-collider";
 
-export class Player {
+export class Character {
   protected speed = 2;
   public body: Sprite;
   public restrictions;
   public collider;
   private initialWidth: number;
-  private controller: KeyboardController;
+  protected controller: AiController;
 
   constructor() {
-    this.controller = new KeyboardController();
+    this.plugController();
+  }
+
+  plugController() {
+    this.controller = new AiController();
   }
 
   load(playerImg, posX, posY, speed, tiles): Promise<Sprite> {
@@ -27,11 +31,11 @@ export class Player {
         this.body.anchor.y = 0.5;
         this.speed = speed;
 
-        this.collider = new Collider(0.15, 0.5, 0.7, 0.5);
+        this.collider = new Collider(this.body, 0.15, 0.5, 0.7, 0.5);
         this.body.collider = this.collider;
         // this.body.addChild(this.collider);
 
-        this.restrictions = new DirectionalCollider(this.body, tiles);
+        this.restrictions = new DirectionalCollider(this.collider, tiles);
         this.controller.addRestrictions(this.restrictions);
 
         resolve(this.body);
@@ -46,7 +50,7 @@ export class Player {
       this.body.dy = dirs.y * this.speed;
 
       this.body.update();
-      this.body.collider.update(this.body);
+      this.collider.update(this.body);
       this.restrictions.update();
 
       this.setAnimation();
@@ -56,7 +60,7 @@ export class Player {
   render() {
     if (this.body) {
       this.body.render();
-      this.body.collider.render();
+      this.collider.render();
     }
   }
 

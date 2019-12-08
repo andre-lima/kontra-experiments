@@ -15,7 +15,7 @@ export class DirectionalCollider extends Sprite.class {
     this.parent = parent;
   }
 
-  update(tiles) {
+  update() {
     const size = 2;
 
     // check up
@@ -39,14 +39,22 @@ export class DirectionalCollider extends Sprite.class {
       width: this.parent.width,
       height: size,
       x: this.parent.x - this.parent.anchor.x * this.parent.width,
-      y: this.parent.y + this.parent.anchor.y * this.parent.height + size
+      y:
+        this.parent.y +
+        this.parent.height -
+        this.parent.anchor.y * this.parent.height +
+        size
     });
 
     // check right
     this.right = this.tiles.layerCollidesWith("walls", {
       width: size,
       height: this.parent.height,
-      x: this.parent.x + this.parent.anchor.x * this.parent.width + size,
+      x:
+        this.parent.x +
+        this.parent.width -
+        this.parent.anchor.x * this.parent.width +
+        size,
       y: this.parent.y - this.parent.anchor.y * this.parent.height
     });
 
