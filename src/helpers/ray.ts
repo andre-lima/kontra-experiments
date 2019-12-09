@@ -1,4 +1,5 @@
 import { Log } from "./log";
+import { directionVector } from "../helpers/index";
 
 export class Ray {
   private p1;
@@ -7,6 +8,7 @@ export class Ray {
   private lineStep;
   private lineLength;
   private tilesCollided;
+  public direction;
 
   update() {}
 
@@ -18,6 +20,8 @@ export class Ray {
   };
 
   cast(p1, p2) {
+    if (!p1 || !p2) return;
+
     this.p1 = p1;
     this.p2 = p2;
     this.ctx = this.p1.context;
@@ -28,6 +32,8 @@ export class Ray {
     // Reduce lineStep when ray is big in length. If not, we could skip lots of tiles like this.
     this.lineLength = this.rayLength(p1.x, p1.y, p2.x, p2.y);
     this.lineStep = 5 / this.lineLength;
+
+    this.direction = directionVector(p1, p2);
   }
 
   render() {

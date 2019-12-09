@@ -12,7 +12,8 @@ export {
   Collider,
   Ray,
   normalize,
-  distance
+  distance,
+  directionVector
 };
 
 // OTHER HELPER FUNCTIONS BELOW
@@ -36,6 +37,12 @@ function configCanvas(
 
 function distance(obj, tgt = { x: 0, y: 0 }): number {
   return Math.sqrt(Math.pow(obj.x - tgt.x, 2) + Math.pow(obj.y - tgt.y, 2));
+}
+
+function directionVector(obj, tgt = { x: 0, y: 0 }) {
+  const V = {x: tgt.x - obj.x, y: tgt.y - obj.y};
+  // console.log(normalize(V));
+  return normalize(V);
 }
 
 function normalize(v) {

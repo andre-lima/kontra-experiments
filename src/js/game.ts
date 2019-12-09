@@ -7,7 +7,7 @@ import mapJson from "../maps/map.json";
 import { loadTiles } from "./assets";
 import { Character } from "./character";
 import { Hero } from "./hero";
-import { Log, DepthSort, Ray } from "../helpers/index";
+import { Log, DepthSort } from "../helpers/index";
 import { tilesCollisionMapping } from "../helpers/collision-map";
 import { Sprite } from "../vendors/kontra/kontra.js";
 import GameObject from "../vendors/kontra/gameObject";
@@ -22,15 +22,14 @@ export class Game {
   private tiles: TileEngine;
   private ready = false;
   private collisionMap;
-  private ray: Ray;
-  private ray2: Ray;
+  private sx = 1;
 
   constructor() {
     this.player = new Hero();
     this.monster = new Character();
     this.boss = new Character();
-    this.ray = new Ray();
-    this.ray2 = new Ray();
+    
+
 
     this.coins = new GameObject();
   }
@@ -60,16 +59,20 @@ export class Game {
 
       this.player.load(playerImg, 16 * 5, 16 * 5, 2, this.tiles).then(body => {
         this.ready = true;
+        
       });
 
       this.monster
         .load(monsterImg, 16 * 31, 16 * 20, 1, this.tiles)
         .then(body => {
           this.ready = true;
+          this.monster.setVision(this.player.body, this.collisionMap);
         });
+        
+        this.boss.load(bossImg, 16 * 31, 16 * 28, 2.5, this.tiles).then(body => {
+          this.ready = true;
+          this.boss.setVision(this.player.body, this.collisionMap);
 
-      this.boss.load(bossImg, 16 * 31, 16 * 28, 3, this.tiles).then(body => {
-        this.ready = true;
       });
     });
   }
@@ -81,17 +84,17 @@ export class Game {
       DepthSort.update();
       this.coin.update();
 
-      this.ray.cast(this.player.body, this.monster.body);
-      this.ray2.cast(this.player.body, this.boss.body);
+
 
       if (collides(this.player.collider, this.coin)) {
         console.log("colliding");
       }
+    }
 
-      this.ray.collidesWithTiles(this.collisionMap);
-      this.ray2.collidesWithTiles(this.collisionMap);
+    this.tiles.sx += this.sx;
 
-      this.ray.collidesWithSprite(this.coin);
+    if (this.tiles.sx <= 0 || this.tiles.sx >= 320) {
+      this.sx = -this.sx;
     }
   }
 
@@ -101,15 +104,10 @@ export class Game {
       DepthSort.render();
       this.coins.render();
 
-      if (this.ray.collidesWithSprite(this.coin)) {
-        this.ray.drawDebugSprites(this.coin);
-      }
+      // if (this.ray.collidesWithSprite(this.coin)) {
+      //   this.ray.drawDebugSprites(this.coin);
+      // }
 
-      this.ray.render();
-      this.ray.drawDebugTiles(16, 16);
-
-      this.ray2.render();
-      this.ray2.drawDebugTiles(16, 16);
     }
   }
 }
