@@ -47,7 +47,7 @@ export class Ray {
     ctx.moveTo(x0, y0);
     ctx.lineTo(x1, y1);
     ctx.strokeStyle = "yellow";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
 
     ctx.stroke();
     ctx.restore();

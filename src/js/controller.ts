@@ -1,5 +1,4 @@
 import { initKeys, keyPressed } from "../vendors/kontra/kontra.js";
-import { normalize } from "../helpers/index";
 
 export class KeyboardController {
   private restrictions;
@@ -35,7 +34,7 @@ export class KeyboardController {
       }
     }
 
-    return normalize(dirs);
+    return dirs;
   }
 
   addRestrictions(dirCollider) {

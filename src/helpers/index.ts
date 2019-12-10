@@ -2,6 +2,7 @@ import { DepthSort } from "./depth-sort";
 import { Log } from "./log";
 import { Collider } from "./collider";
 import { Ray } from "./ray";
+import { Panel } from "./panel";
 
 export {
   $,
@@ -13,7 +14,8 @@ export {
   Ray,
   normalize,
   distance,
-  directionVector
+  directionVector,
+  Panel
 };
 
 // OTHER HELPER FUNCTIONS BELOW
@@ -26,10 +28,11 @@ function configCanvas(
   canvas: HTMLCanvasElement,
   width = 480,
   height = 320,
+  zoom = 1,
   color?: string
 ) {
-  canvas.width = width;
-  canvas.height = height;
+  canvas.width = width / zoom;
+  canvas.height = height / zoom;
   canvas.style.backgroundColor = color;
 
   return canvas;
@@ -40,7 +43,7 @@ function distance(obj, tgt = { x: 0, y: 0 }): number {
 }
 
 function directionVector(obj, tgt = { x: 0, y: 0 }) {
-  const V = {x: tgt.x - obj.x, y: tgt.y - obj.y};
+  const V = { x: tgt.x - obj.x, y: tgt.y - obj.y };
   // console.log(normalize(V));
   return normalize(V);
 }

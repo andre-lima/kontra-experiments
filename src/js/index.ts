@@ -12,7 +12,7 @@ import { Log } from "../helpers/log";
 
 let { canvas, context } = init();
 
-configCanvas(canvas, 640 / 2, 512 / 2, "#111111");
+configCanvas(canvas, 640, 512, 1, "#111111");
 
 // Manage loading screen and all.
 
