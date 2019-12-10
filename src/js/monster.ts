@@ -63,10 +63,8 @@ export class Monster extends Character {
       this.body.render();
       this.collider.render();
 
-      if (this.target && this.collisionMap) {
-        this.ray.render();
-        this.ray.drawDebugTiles(16, 16);
-      }
+      this.ray.render();
+      this.ray.drawDebugTiles(16, 16);
     }
   }
 
