@@ -26,12 +26,14 @@ export class Game {
   private panel: Panel;
 
   constructor() {
+    // Instantiating characters and items
     this.player = new Hero();
     this.monster = new Monster();
     this.boss = new Monster();
-
     this.coins = new GameObject();
 
+    // WIP: Dialog box
+    /*
     this.panel = new Panel(
       getCanvas(),
       80,
@@ -41,11 +43,13 @@ export class Game {
       "rgba(222,222,222,0.5)"
     );
     this.panel.show();
+    */
   }
 
   load() {
     console.log("loading game assets");
 
+    // Adding coin to game. 
     let coin = new Image();
     coin.src = coinImg;
 
@@ -57,43 +61,41 @@ export class Game {
       image: coin
     });
 
+    // Coins works as a group
     this.coins.addChild(this.coin);
 
+    // Adding items to depth sort module
     DepthSort.add(this.coins);
     DepthSort.add(this.player, this.monster, this.boss);
 
     loadTiles(mapJson, tilesImage).then((tiles: TileEngine) => {
       this.tiles = tiles;
 
+      // Generate collision mapping to be used by raycasting
       this.collisionMap = tilesCollisionMapping(this.tiles, "walls");
 
-      this.player.load(playerImg, 16 * 5, 16 * 5, 2, this.tiles).then(body => {
-        this.ready = true;
-      });
+      const promises = []
 
-      this.monster
-        .load(monsterImg, 16 * 31, 16 * 20, 1, this.tiles)
-        .then(body => {
-          this.ready = true;
-          this.monster.setVision(this.player.body, this.collisionMap);
-        });
-
-      this.boss.load(bossImg, 16 * 31, 16 * 28, 1.8, this.tiles).then(body => {
+      promises.push(this.player.load(playerImg, 16 * 5, 16 * 5, 2, this.tiles))
+      promises.push(this.monster.load(monsterImg, 16 * 10, 16 * 25, 1, this.tiles));
+      promises.push(this.boss.load(bossImg, 16 * 31, 16 * 28, 1.8, this.tiles));
+      
+      Promise.all(promises).then(res => {
         this.ready = true;
+        this.monster.setVision(this.player.body, this.collisionMap);
         this.boss.setVision(this.player.body, this.collisionMap);
       });
+
+
     });
   }
 
   update() {
     if (this.ready) {
-      // this.player.update();
-      // this.monster.update();
       DepthSort.update();
-      this.coin.update();
 
       if (collides(this.player.collider, this.coin)) {
-        console.log("colliding");
+        console.log("bling!");
       }
     }
   }
@@ -102,12 +104,8 @@ export class Game {
     if (this.ready) {
       this.tiles.render();
       DepthSort.render();
-      this.coins.render();
-      this.panel.render();
-
-      // if (this.ray.collidesWithSprite(this.coin)) {
-      //   this.ray.drawDebugSprites(this.coin);
-      // }
+      // this.coins.render();
+      // this.panel.render();
     }
   }
 }

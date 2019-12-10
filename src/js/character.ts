@@ -16,8 +16,8 @@ export class Character {
 
   load(characterImg, posX, posY, speed, tiles): Promise<Sprite> {
     return new Promise(resolve => {
-      loadAnimatedPlayer(characterImg).then((loadedPlayer: Sprite) => {
-        this.body = loadedPlayer;
+      loadAnimatedPlayer(characterImg).then((loadedCharacter: Sprite) => {
+        this.body = loadedCharacter;
         this.initialWidth = this.body.width;
         this.body.x = posX;
         this.body.y = posY;
@@ -27,10 +27,12 @@ export class Character {
 
         tiles.addObject(this.body);
 
+        // Custom collider
         this.collider = new Collider(this.body, 0.15, 0.5, 0.7, 0.5);
         this.body.collider = this.collider;
         // this.body.addChild(this.collider);
 
+        // Creating logic to block character from moving (eg colliding with tiles)
         this.restrictions = new DirectionalCollider(this.collider, tiles);
 
         resolve(this.body);

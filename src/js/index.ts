@@ -1,10 +1,6 @@
 import {
-  TileEngine,
   init,
-  dataAssets,
   GameLoop,
-  Sprite,
-  SpriteSheet
 } from "../vendors/kontra/kontra.js";
 import { $, $$, configCanvas } from "../helpers/index";
 import { Game } from "./game";

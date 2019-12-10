@@ -12,6 +12,8 @@ enum UpDown {
   Down
 }
 
+// Randomly tries to move player left or right and up or down.
+// Also includes Chasing logic.
 export class AiController {
   private restrictions;
   public isChasing = false;
@@ -63,6 +65,7 @@ export class AiController {
     return dirs;
   }
 
+  // Chasing logic, taking into consideration the walls.
   chasing(dirs) {
     if (this.restrictions.blockedLeft() && dirs.x < 0) {
       dirs.x = 0;

@@ -18,12 +18,12 @@ export {
   Panel
 };
 
-// OTHER HELPER FUNCTIONS BELOW
 
 // based on https://gist.github.com/paulirish/12fb951a8b893a454b32
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+// Configuring canvas
 function configCanvas(
   canvas: HTMLCanvasElement,
   width = 480,
@@ -38,16 +38,18 @@ function configCanvas(
   return canvas;
 }
 
+// Calculating vector distance between 2 points
 function distance(obj, tgt = { x: 0, y: 0 }): number {
   return Math.sqrt(Math.pow(obj.x - tgt.x, 2) + Math.pow(obj.y - tgt.y, 2));
 }
 
+// Normalizing the direction vector
 function directionVector(obj, tgt = { x: 0, y: 0 }) {
   const V = { x: tgt.x - obj.x, y: tgt.y - obj.y };
-  // console.log(normalize(V));
   return normalize(V);
 }
 
+// Normalizing vector
 function normalize(v) {
   const d = distance(v);
 
