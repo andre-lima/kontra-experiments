@@ -67,3 +67,7 @@ export function loadTiles(mapJson, tilesImage) {
     });
   });
 }
+
+export function loadObjects(objectLayerName, tileMap) {
+  return tileMap.layerMap[objectLayerName].objects;
+}

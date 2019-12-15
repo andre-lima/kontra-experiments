@@ -4,19 +4,20 @@ import monsterImg from "../assets/images/enemy-0.png";
 import bossImg from "../assets/images/enemy-1.png";
 import coinImg from "../assets/images/coin.png";
 import mapJson from "../maps/map.json";
-import { loadTiles } from "./assets";
+import { loadTiles, loadObjects } from "./assets";
 import { Hero } from "./hero";
 import { Log, DepthSort, Panel } from "../helpers/index";
 import { tilesCollisionMapping } from "../helpers/collision-map";
 import { Sprite } from "../vendors/kontra/kontra.js";
 import { getCanvas } from "../vendors/kontra/core.js";
 import GameObject from "../vendors/kontra/gameObject";
+import { Collectible } from "./collectible";
 import { collides } from "../vendors/kontra/collision";
 import { Monster } from "./monster";
 
 export class Game {
   private player: Hero;
-  private monster: Monster;
+  private monsters: GameObject;
   private boss: Monster;
   private coin: Sprite;
   private coins;
@@ -27,9 +28,10 @@ export class Game {
 
   constructor() {
     // Instantiating characters and items
-    this.player = new Hero();
-    this.monster = new Monster();
-    this.boss = new Monster();
+    // this.player = new Hero();
+    // this.monster = new Monster();
+    // this.boss = new Monster();
+    this.monsters = new GameObject();
     this.coins = new GameObject();
 
     // WIP: Dialog box
@@ -49,44 +51,66 @@ export class Game {
   load() {
     console.log("loading game assets");
 
-    // Adding coin to game. 
-    let coin = new Image();
-    coin.src = coinImg;
-
-    this.coin = Sprite({
-      x: 100,
-      y: 120,
-      width: 8,
-      height: 8,
-      image: coin
-    });
-
     // Coins works as a group
-    this.coins.addChild(this.coin);
 
     // Adding items to depth sort module
     DepthSort.add(this.coins);
-    DepthSort.add(this.player, this.monster, this.boss);
+    // DepthSort.add(this.player, this.monster, this.boss);
 
     loadTiles(mapJson, tilesImage).then((tiles: TileEngine) => {
+      const promises = [];
+
       this.tiles = tiles;
 
       // Generate collision mapping to be used by raycasting
       this.collisionMap = tilesCollisionMapping(this.tiles, "walls");
 
-      const promises = []
+      // Get all objects from tilemap
+      const objects = loadObjects("entities", tiles);
+      objects.forEach(obj => {
+        switch (obj.type) {
+          case "player":
+            this.player = new Hero();
+            promises.push(
+              this.player.load(playerImg, obj.x, obj.y, 2, this.tiles)
+            );
+            DepthSort.add(this.player);
+            break;
 
-      promises.push(this.player.load(playerImg, 16 * 5, 16 * 5, 2, this.tiles))
-      promises.push(this.monster.load(monsterImg, 16 * 10, 16 * 25, 1, this.tiles));
-      promises.push(this.boss.load(bossImg, 16 * 31, 16 * 28, 1.8, this.tiles));
-      
-      Promise.all(promises).then(res => {
-        this.ready = true;
-        this.monster.setVision(this.player.body, this.collisionMap);
-        this.boss.setVision(this.player.body, this.collisionMap);
+          case "boss":
+            const boss = new Monster();
+            this.monsters.addChild(boss);
+            promises.push(boss.load(bossImg, obj.x, obj.y, 1, this.tiles));
+            DepthSort.add(boss);
+            break;
+
+          case "enemy":
+            const monster = new Monster();
+            this.monsters.addChild(monster);
+            promises.push(
+              monster.load(monsterImg, obj.x, obj.y, 1, this.tiles)
+            );
+            DepthSort.add(monster);
+            break;
+
+          case "coin":
+            const coin = new Collectible();
+            promises.push(coin.load(coinImg, obj.x + 8, obj.y + 8, 8, 8));
+            // DepthSort.add(coin);
+            this.coins.addChild(coin);
+            break;
+
+          default:
+            break;
+        }
       });
 
-
+      Promise.all(promises).then(res => {
+        this.ready = true;
+        this.monsters.children.forEach(monster =>
+          monster.setVision(this.player.body, this.collisionMap)
+        );
+      });
     });
   }
 
@@ -94,17 +118,20 @@ export class Game {
     if (this.ready) {
       DepthSort.update();
 
-      if (collides(this.player.collider, this.coin)) {
-        console.log("bling!");
-      }
+      this.coins.children.forEach(coin => {
+        if (collides(this.player.body, coin.body)) {
+          coin.onCollected();
+          this.coins.removeChild(coin);
+        }
+      });
     }
   }
 
   render() {
     if (this.ready) {
       this.tiles.render();
+      this.coins.render();
       DepthSort.render();
-      // this.coins.render();
       // this.panel.render();
     }
   }

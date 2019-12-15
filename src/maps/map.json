@@ -390,7 +390,7 @@
                 {
                  "height":16,
                  "id":37,
-                 "name":"enemy",
+                 "name":"boss",
                  "properties":[
                         {
                          "name":"etype",
@@ -398,7 +398,7 @@
                          "value":1
                         }],
                  "rotation":0,
-                 "type":"enemy",
+                 "type":"boss",
                  "visible":true,
                  "width":16,
                  "x":384,

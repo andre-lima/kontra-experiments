@@ -1,16 +1,11 @@
-import {
-  init,
-  GameLoop,
-} from "../vendors/kontra/kontra.js";
+import { init, GameLoop } from "../vendors/kontra/kontra.js";
 import { $, $$, configCanvas } from "../helpers/index";
 import { Game } from "./game";
 import { Log } from "../helpers/log";
 
 let { canvas, context } = init();
 
-configCanvas(canvas, 640, 512, 1, "#111111");
-
-// Manage loading screen and all.
+configCanvas(canvas, 640, 512, 2, "#111111");
 
 const game = new Game();
 game.load();
