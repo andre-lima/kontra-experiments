@@ -15,37 +15,28 @@ export class Snapped extends Sprite.class {
   private restrictions;
   private movingToNext = false;
   private currDirection: Direction;
-  public body
-  
+  public body;
+
   constructor(gridSize, tiles) {
-    super({x: 16*10, y:16*10, width: 16, height: 16, color: 'red'});
+    super({ x: 16 * 10, y: 16 * 10, width: 16, height: 16, color: "red" });
 
     initKeys();
     this.gridSize = gridSize;
     this.restrictions = new DirectionalCollider(this, tiles);
   }
-  
+
   update() {
     super.update();
-    this.restrictions.update();
-    
+
     if (this.movingToNext) {
       if (this.currDirection === Direction.LEFT) {
-        if (!this.restrictions.blockedLeft()) {
-          this.x += -1;
-        }
+        this.x += -1;
       } else if (this.currDirection === Direction.UP) {
-        if (!this.restrictions.blockedUp()) {
-          this.y += -1;
-        }
+        this.y += -1;
       } else if (this.currDirection === Direction.RIGHT) {
-        if (!this.restrictions.blockedRight()) {
-          this.x += 1;
-        }
+        this.x += 1;
       } else if (this.currDirection === Direction.DOWN) {
-        if (!this.restrictions.blockedDown()) {
-          this.y += 1;
-        }
+        this.y += 1;
       }
     }
 
@@ -53,15 +44,17 @@ export class Snapped extends Sprite.class {
       this.movingToNext = false;
     }
 
-    if (keyPressed("a")) {
+    if (keyPressed("a") && !this.restrictions.blockedLeft()) {
       this.moveTo(Direction.LEFT);
-    } else if (keyPressed("w")) {
+    } else if (keyPressed("w") && !this.restrictions.blockedUp()) {
       this.moveTo(Direction.UP);
-    } else if (keyPressed("d")) {
+    } else if (keyPressed("d") && !this.restrictions.blockedRight()) {
       this.moveTo(Direction.RIGHT);
-    } else if (keyPressed("s")) {
+    } else if (keyPressed("s") && !this.restrictions.blockedDown()) {
       this.moveTo(Direction.DOWN);
     }
+
+    this.restrictions.update();
   }
 
   private moveTo(dir: Direction) {
