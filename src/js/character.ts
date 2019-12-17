@@ -19,10 +19,10 @@ export class Character {
       loadAnimatedPlayer(characterImg).then((loadedCharacter: Sprite) => {
         this.body = loadedCharacter;
         this.initialWidth = this.body.width;
-        this.body.x = posX;
-        this.body.y = posY;
-        this.body.anchor.x = 0.5;
-        this.body.anchor.y = 0.5;
+        this.body.x = posX;// - this.body.width * 0.5;
+        this.body.y = posY;// - this.body.height * 0.5;
+        this.body.anchor.x = 0;//.5;
+        this.body.anchor.y = 0;//.5;
         this.speed = speed;
 
         tiles.addObject(this.body);

@@ -4,17 +4,18 @@ import { KeyboardController } from "./controller";
 import { Log, Collider } from "../helpers/index";
 import { DirectionalCollider } from "../helpers/directional-collider";
 import { Character } from "./character";
+import { GridMovement } from "./grid-movement";
 
 export class Hero extends Character {
-  protected controller: KeyboardController;
+  protected controller: GridMovement; //KeyboardController;
 
   constructor() {
     super();
-    this.controller = new KeyboardController();
+    this.controller = new GridMovement(16); // new KeyboardController();
   }
 
   update() {
-    const dirs = this.controller.update();
+    const dirs = this.controller.update(this.body.x - this.body.anchor.x, this.body.y  - this.body.anchor.y);
 
     super.update(dirs, this.speed);
   }

@@ -81,7 +81,7 @@ export class Game {
             const boss = new Monster();
             this.monsters.addChild(boss);
             promises.push(boss.load(bossImg, obj.x, obj.y, 1, this.tiles));
-            DepthSort.add(boss);
+            // DepthSort.add(boss);
             break;
 
           case "enemy":
@@ -90,14 +90,14 @@ export class Game {
             promises.push(
               monster.load(monsterImg, obj.x, obj.y, 1, this.tiles)
             );
-            DepthSort.add(monster);
+            // DepthSort.add(monster);
             break;
 
           case "coin":
             const coin = new Collectible();
             promises.push(coin.load(coinImg, obj.x + 8, obj.y + 8, 8, 8));
             // DepthSort.add(coin);
-            this.coins.addChild(coin);
+            // this.coins.addChild(coin);
             break;
 
           default:
