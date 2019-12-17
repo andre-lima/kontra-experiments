@@ -14,6 +14,7 @@ import GameObject from "../vendors/kontra/gameObject";
 import { Collectible } from "./collectible";
 import { collides } from "../vendors/kontra/collision";
 import { Monster } from "./monster";
+import { Snapped } from "./snapped";
 
 export class Game {
   private player: Hero;
@@ -25,14 +26,13 @@ export class Game {
   private ready = false;
   private collisionMap;
   private panel: Panel;
+  private snapped: Snapped;
 
   constructor() {
     // Instantiating characters and items
-    // this.player = new Hero();
-    // this.monster = new Monster();
-    // this.boss = new Monster();
     this.monsters = new GameObject();
     this.coins = new GameObject();
+    
 
     // WIP: Dialog box
     /*
@@ -107,6 +107,9 @@ export class Game {
 
       Promise.all(promises).then(res => {
         this.ready = true;
+        
+        this.snapped = new Snapped(16, this.tiles);
+
         this.monsters.children.forEach(monster =>
           monster.setVision(this.player.body, this.collisionMap)
         );
@@ -117,6 +120,7 @@ export class Game {
   update() {
     if (this.ready) {
       DepthSort.update();
+      this.snapped.update();
 
       this.coins.children.forEach(coin => {
         if (collides(this.player.body, coin.body)) {
@@ -132,6 +136,7 @@ export class Game {
       this.tiles.render();
       this.coins.render();
       DepthSort.render();
+      this.snapped.render()
       // this.panel.render();
     }
   }
