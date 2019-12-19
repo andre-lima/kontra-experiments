@@ -16,13 +16,23 @@ export class Snapped extends Sprite.class {
   private movingToNext = false;
   private currDirection: Direction;
   public body;
+  public collider;
+  private colliderOffset = 1;
 
   constructor(gridSize, tiles) {
     super({ x: 16 * 10, y: 16 * 10, width: 16, height: 16, color: "red" });
 
+    this.collider = Sprite({
+      x: 16 * 10 + this.colliderOffset,
+      y: 16 * 10 + this.colliderOffset,
+      width: 16 - this.colliderOffset * 2,
+      height: 16 - this.colliderOffset * 2,
+      color: "yellow"
+    });
+
     initKeys();
     this.gridSize = gridSize;
-    this.restrictions = new DirectionalCollider(this, tiles);
+    this.restrictions = new DirectionalCollider(this.collider, tiles);
   }
 
   update() {
@@ -54,6 +64,10 @@ export class Snapped extends Sprite.class {
       this.moveTo(Direction.DOWN);
     }
 
+    this.collider.x = this.x + this.colliderOffset;
+    this.collider.y = this.y + this.colliderOffset;
+
+    this.collider.update();
     this.restrictions.update();
   }
 
@@ -62,6 +76,11 @@ export class Snapped extends Sprite.class {
       this.currDirection = dir;
       this.movingToNext = true;
     }
+  }
+
+  render() {
+    super.render();
+    this.collider.render();
   }
 
   addRestrictions(dirCollider) {
