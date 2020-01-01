@@ -32,7 +32,6 @@ export class Game {
     // Instantiating characters and items
     this.monsters = new GameObject();
     this.coins = new GameObject();
-    
 
     // WIP: Dialog box
     /*
@@ -81,7 +80,7 @@ export class Game {
             const boss = new Monster();
             this.monsters.addChild(boss);
             promises.push(boss.load(bossImg, obj.x, obj.y, 1, this.tiles));
-            // DepthSort.add(boss);
+            DepthSort.add(boss);
             break;
 
           case "enemy":
@@ -90,14 +89,14 @@ export class Game {
             promises.push(
               monster.load(monsterImg, obj.x, obj.y, 1, this.tiles)
             );
-            // DepthSort.add(monster);
+            DepthSort.add(monster);
             break;
 
           case "coin":
             const coin = new Collectible();
             promises.push(coin.load(coinImg, obj.x + 8, obj.y + 8, 8, 8));
-            // DepthSort.add(coin);
-            // this.coins.addChild(coin);
+            DepthSort.add(coin);
+            this.coins.addChild(coin);
             break;
 
           default:
@@ -107,7 +106,7 @@ export class Game {
 
       Promise.all(promises).then(res => {
         this.ready = true;
-        
+
         this.snapped = new Snapped(16, this.tiles);
 
         this.monsters.children.forEach(monster =>
@@ -136,7 +135,7 @@ export class Game {
       this.tiles.render();
       this.coins.render();
       DepthSort.render();
-      this.snapped.render()
+      this.snapped.render();
       // this.panel.render();
     }
   }
